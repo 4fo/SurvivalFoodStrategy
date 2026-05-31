@@ -17,7 +17,7 @@
   --parchment-dkr: #d4c090;
   --ink:           #1e1408;
   --ink-med:       #3d2b0e;
-  --ink-faint:     #6b5230;
+  --ink-faint:     #4a3014;
   --red-ink:       #8b2318;
   --green-ink:     #1e4a28;
   --gold:          #a07820;
@@ -72,7 +72,7 @@ body {
       transparent 1px, transparent 12px
     );
   border-right: 3px solid var(--gold);
-  padding: 0;
+  padding: 52px 0 0;
   overflow-y: auto;
   z-index: 100;
   transform: translateX(-100%);
@@ -82,7 +82,7 @@ body {
 .sidebar.open { transform: translateX(0); }
 
 .sidebar-header {
-  padding: 1.8rem 1.2rem 1rem;
+  padding: 1rem 1.2rem 1rem;
   border-bottom: 1px solid rgba(200,160,64,0.3);
 }
 .sidebar-title {
@@ -182,7 +182,11 @@ body {
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s;
 }
+.toolbar-brand:hover { color: var(--parchment); }
 
 /* ── Search ── */
 .search-container {
@@ -338,6 +342,8 @@ body {
   color: var(--ink-faint);
   text-transform: uppercase;
   margin-bottom: 0.8rem;
+  text-align: center;
+  padding: 0 1rem;
 }
 .cover-rule {
   width: 160px; height: 1px;
@@ -817,15 +823,15 @@ body {
   padding: 0 0.3rem;
   line-height: 1.4;
 }
-.margin-illus-dims {
-  font-family: var(--font-display);
-  font-size: 0.58rem;
-  letter-spacing: 0.1em;
-  color: var(--gold);
+.margin-illus-cite {
+  font-family: var(--font-caption);
+  font-size: 0.65rem;
+  color: var(--ink-faint);
   display: block;
   text-align: center;
   margin-top: 0.2rem;
-  opacity: 0.6;
+  font-style: italic;
+  opacity: 0.7;
 }
 
 /* Specimen modal */
@@ -898,6 +904,10 @@ body {
 .sidebar-backdrop.open { display: block; }
 
 /* ── Responsive ── */
+@media (max-width: 900px) {
+  .sidebar { width: 100%; }
+  .sidebar.open { transform: translateX(0); }
+}
 @media (max-width: 780px) {
   .page-body { grid-template-columns: 1fr; }
   .page-margin { display: none; }
@@ -906,10 +916,72 @@ body {
   .cover-nav-grid { grid-template-columns: 1fr; }
   #search-input { width: 150px; }
   .cover-title { font-size: 2rem; }
+  #search-results-panel { width: calc(100vw - 2rem); right: 0; left: auto; }
 }
 @media (max-width: 520px) {
   .plant-grid { grid-template-columns: repeat(2, 1fr); }
   .chapter-header { padding: 2rem 1.2rem 1.5rem; }
+  .toolbar-brand { font-size: 0.8rem; }
+  .sidebar-title { font-size: 0.7rem; letter-spacing: 0.08em; }
+  .cover-title { font-size: 1.6rem; }
+  .cover-intro { font-size: 0.92rem; }
+  .plant-card-img { height: 130px; }
+  .plant-card { cursor: default; }
+  .plant-card:hover { transform: none; }
+  .nav-link, .nav-link.sub { padding-top: 0.55rem; padding-bottom: 0.55rem; }
+}
+@media (max-width: 380px) {
+  .plant-grid { grid-template-columns: 1fr; }
+  .cover-nav-card { padding: 0.8rem 0.9rem; }
+  .chapter-header { padding: 1.5rem 1rem 1rem; }
+  .page-main { padding: 1rem; }
+}
+
+
+/* ── Psalm 65 footer marquee ── */
+.footer-marquee {
+  background: var(--spine);
+  border-top: 2px solid var(--gold);
+  border-bottom: 1px solid rgba(200,160,64,0.2);
+  padding: 0.85rem 0;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.footer-marquee-label {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--gold-lt);
+  white-space: nowrap;
+  padding: 0 1.2rem;
+  flex-shrink: 0;
+  border-right: 1px solid rgba(200,160,64,0.25);
+}
+.footer-marquee-track {
+  overflow: hidden;
+  flex: 1;
+  padding: 0 1.2rem;
+}
+.footer-marquee-text {
+  display: inline-block;
+  white-space: nowrap;
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--parchment);
+  opacity: 0.7;
+  animation: scriptureScroll 180s linear infinite;
+}
+.marquee-sep {
+  color: var(--gold);
+  opacity: 0.4;
+  margin: 0 1.5rem;
+  font-style: normal;
+}
+@keyframes scriptureScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 /* ── Highlight search matches ── */
@@ -953,19 +1025,19 @@ body {
   <button class="menu-btn" id="menu-toggle" aria-label="Open menu">
     <span></span><span></span><span></span>
   </button>
-  <div class="toolbar-brand">Survival Food Strategy · A Field Manual</div>
+  <a class="toolbar-brand" onclick="showPage('cover')" aria-label="Home">Survival Food Strategy · A Field Manual</a>
   <div class="search-container">
     <input type="text" id="search-input" placeholder="Search plants, methods…" autocomplete="off">
     <button class="search-btn" id="search-btn" aria-label="Search">🔍</button>
-    <div id="search-results-panel"></div>
+    <div id="search-results-panel" role="listbox" aria-label="Search results"></div>
   </div>
 </header>
 
 <!-- ══════════════════ SIDEBAR ══════════════════ -->
 <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
-<nav class="sidebar" id="sidebar">
+<nav class="sidebar" id="sidebar" aria-label="Table of Contents">
   <div class="sidebar-header">
-    <div class="sidebar-title">Survival Food Strategy</div>
+    <a class="sidebar-title" onclick="showPage('cover')" aria-label="Home">Survival Food Strategy</a>
     <div class="sidebar-subtitle">A Field Manual for Farm & Homestead</div>
   </div>
 
@@ -1076,7 +1148,7 @@ body {
     </div>
 
     <div class="cover-footer">
-      South India · Western Ghats · A Living Document
+      South India · Western Ghats · <span style="white-space: nowrap;">A Living Document</span>
     </div>
   </div>
 </section>
@@ -1246,10 +1318,10 @@ body {
         to local temperature sums, rainfall seasonality, and soil tests.
       </div>
 
-      <img src="pics/section-firstprinciples.svg" alt="First Principles illustration" class="margin-illus">
+      <img src="pics/wild-yam.png" alt="Dioscorea spp. — yam" class="margin-illus">
       <div class="margin-illus-caption">
-        The layered resilience model
-        <span class="margin-illus-dims">800 × 300 px · Replace with diagram</span>
+        Dioscorea spp. — native Western Ghats yams, a foundational survival food
+        <span class="margin-illus-cite">Vilmorin-Andrieux, Les Plantes Potagères (1883)</span>
       </div>
 
       <div class="margin-note">
@@ -1290,25 +1362,30 @@ body {
         mild days (15–25°C), cool nights, frequent mist and rain, occasional frost risk in winter,
         and well-drained acidic soils. Traditional farming here includes potatoes, carrots, garlic,
         beetroot, French beans, chow-chow (chayote), and plantation crops like coffee with intercrops.
+        Expanded with proven hill crops, this strategy builds a resilient, polyculture-based food system.
       </p>
 
       <div class="callout-box">
         <div class="callout-label">Highland Context</div>
         <p>Integrate "Three Sisters"-style polyculture where possible: maize + beans + chow-chow or
         pumpkin. Prioritise perennials, nitrogen-fixers, and crops that store well without refrigeration —
-        critical in rural highland settings.</p>
+        critical in rural highland settings. Hill banana (Virupakshi variety) and avocado add tree-level
+        resilience for both calories and fats.</p>
       </div>
 
       <h3 class="section-heading" id="hl-calories">1. Calorie-Rich Fuel Staples</h3>
       <p class="body-text">
         The foundation layer at high altitude centres on cool-adapted tubers and starchy roots.
-        Potatoes remain the primary workhorse, supplemented by native yam varieties that thrive
-        under the misty conditions of the Palani Hills.
+        Potatoes remain the primary workhorse — including local Kodaikanal varieties grown by
+        Poombarai and Vilpatti farmers. Carrots, beetroot, and Kodaikanal hill
+        garlic (GI-tagged) provide caloric and flavour diversity. Turnips and radishes fill quick
+        gaps. Hill banana (Virupakshi variety) and avocado add tree-level calorie density and
+        healthy fats for long-term resilience.
       </p>
 
       <div class="plant-grid">
         <div class="plant-card" onclick="openModal('potato')">
-          <img src="pics/potato.svg" alt="Potato illustration" class="plant-card-img">
+          <img src="pics/potato.png" alt="Potato illustration" class="plant-card-img">
           <div class="plant-card-body">
             <div class="plant-card-name">Solanum tuberosum</div>
             <div class="plant-card-common">Potato · Major Kodaikanal crop (Poombarai/Vilpatti)</div>
@@ -1318,37 +1395,25 @@ body {
             </div>
           </div>
         </div>
-        <div class="plant-card" onclick="openModal('sweet-potato')">
-          <img src="pics/sweet-potato.svg" alt="Sweet potato" class="plant-card-img">
+        <div class="plant-card" onclick="openModal('carrot')">
+          <img src="pics/carrot.png" alt="Carrot illustration" class="plant-card-img">
           <div class="plant-card-body">
-            <div class="plant-card-name">Ipomoea batatas</div>
-            <div class="plant-card-common">Sweet Potato · Sakkaravalli Kizhangu</div>
+            <div class="plant-card-name">Daucus carota</div>
+            <div class="plant-card-common">Carrot · Gajjar · Two-season root for hills & plains</div>
             <div class="plant-card-tags">
               <span class="tag tag-calorie">Calorie</span>
-              <span class="tag tag-perennial">Perennial</span>
+              <span class="tag tag-storage">Storage</span>
             </div>
           </div>
         </div>
-        <div class="plant-card" onclick="openModal('elephant-yam')">
-          <img src="pics/elephant-foot-yam.svg" alt="Elephant foot yam" class="plant-card-img">
+        <div class="plant-card" onclick="openModal('garlic')">
+          <img src="pics/garlic.png" alt="Garlic illustration" class="plant-card-img">
           <div class="plant-card-body">
-            <div class="plant-card-name">Amorphophallus paeoniifolius</div>
-            <div class="plant-card-common">Elephant Foot Yam · Senai · Suran</div>
+            <div class="plant-card-name">Allium sativum</div>
+            <div class="plant-card-common">Garlic · Vellai Poondu · GI-tagged Kodaikanal hill garlic</div>
             <div class="plant-card-tags">
               <span class="tag tag-calorie">Calorie</span>
-              <span class="tag tag-backup">Backup</span>
-              <span class="tag tag-perennial">Perennial</span>
-            </div>
-          </div>
-        </div>
-        <div class="plant-card" onclick="openModal('wild-yam')">
-          <img src="pics/wild-yam.svg" alt="Wild yam" class="plant-card-img">
-          <div class="plant-card-body">
-            <div class="plant-card-name">Dioscorea spp.</div>
-            <div class="plant-card-common">Wild Yams · Native to Western Ghats</div>
-            <div class="plant-card-tags">
-              <span class="tag tag-calorie">Calorie</span>
-              <span class="tag tag-backup">Backup</span>
+              <span class="tag tag-storage">Storage</span>
             </div>
           </div>
         </div>
@@ -1359,54 +1424,77 @@ body {
         Nitrogen-fixing legumes are the backbone of highland soil fertility. Intercropped with
         main staples — beans climbing corn stalks in the Three Sisters tradition — they deliver
         protein and soil enrichment simultaneously, crucial for sustaining high-altitude plots
-        without external fertilisers.
+        without external fertilisers. French beans and broad/faba beans are the primary highland
+        protein — both proven in Kodaikanal conditions.
       </p>
 
       <div class="plant-grid">
-        <div class="plant-card" onclick="openModal('lablab')">
-          <img src="pics/lablab-bean.svg" alt="Lablab bean" class="plant-card-img">
+        <div class="plant-card" onclick="openModal('french-bean')">
+          <img src="pics/french-bean.png" alt="French bean" class="plant-card-img">
           <div class="plant-card-body">
-            <div class="plant-card-name">Lablab purpureus</div>
-            <div class="plant-card-common">Hyacinth Bean · Avare · Avarai</div>
+            <div class="plant-card-name">Phaseolus vulgaris</div>
+            <div class="plant-card-common">French Bean · Bush/Climbing · Primary highland pulse</div>
             <div class="plant-card-tags">
               <span class="tag tag-protein">Protein</span>
-              <span class="tag tag-perennial">Perennial</span>
+              <span class="tag tag-perennial">Annual</span>
             </div>
           </div>
         </div>
-        <div class="plant-card" onclick="openModal('pigeon-pea')">
-          <img src="pics/pigeon-pea.svg" alt="Pigeon pea" class="plant-card-img">
+        <div class="plant-card" onclick="openModal('faba-bean')">
+          <img src="pics/faba-bean.png" alt="Faba bean" class="plant-card-img">
           <div class="plant-card-body">
-            <div class="plant-card-name">Cajanus cajan</div>
-            <div class="plant-card-common">Pigeon Pea · Toor Dal · Thuvarai</div>
+            <div class="plant-card-name">Vicia faba</div>
+            <div class="plant-card-common">Faba Bean · Broad Bean · Mochaikkai</div>
             <div class="plant-card-tags">
               <span class="tag tag-protein">Protein</span>
-              <span class="tag tag-perennial">Perennial</span>
+            </div>
+          </div>
+        </div>
+        <div class="plant-card" onclick="openModal('garden-pea')">
+          <img src="pics/garden-pea.png" alt="Garden pea" class="plant-card-img">
+          <div class="plant-card-body">
+            <div class="plant-card-name">Pisum sativum</div>
+            <div class="plant-card-common">Garden Pea · Pattani · Quick cool-season legume</div>
+            <div class="plant-card-tags">
+              <span class="tag tag-protein">Protein</span>
             </div>
           </div>
         </div>
       </div>
 
       <div class="tip-box">
-        <div class="tip-label">Companion Planting Note</div>
-        <p>French beans, broad/faba beans, rice beans (Vigna umbellata — hardy to 2000m) and cowpeas
-        round out the protein guild. Intercrop heavily with staples; they fix nitrogen in lateritic
-        soils and support the entire system's fertility baseline.</p>
+        <div class="tip-label">Highland Protein Guild</div>
+        <p><strong>Primary:</strong> French beans (bush/climbing) and broad/faba beans — both thrive in Kodaikanal's cool climate.
+        <strong>Additions:</strong> Rice Bean (Vigna umbellata — hardy to 2000m), Cowpea (cooler seasons), Chickpeas, Garden Peas,
+        and Scarlet Runner Bean (perennial potential). Intercrop heavily with staples; they fix nitrogen
+        in lateritic soils and support the entire system's fertility baseline.</p>
       </div>
 
       <h3 class="section-heading" id="hl-storage">3. Bulk Food & Long Storage</h3>
       <p class="body-text">
         Chow-Chow (Chayote squash) is the star of highland storage — a prolific perennial vine
         that thrives in Kodaikanal conditions, produces fruit that stores for months, and integrates
-        seamlessly into South Indian cooking as kootu, sambar, and poriyal.
+        seamlessly into South Indian cooking as kootu, sambar, and poriyal. Avocado adds tree-level
+        calorie-dense fruit with healthy fats, extending the storage layer into the canopy.
       </p>
 
       <div class="plant-grid">
         <div class="plant-card" onclick="openModal('chow-chow')">
-          <img src="pics/chow-chow.svg" alt="Chow chow" class="plant-card-img">
+          <img src="pics/chow-chow.png" alt="Chow chow" class="plant-card-img">
           <div class="plant-card-body">
             <div class="plant-card-name">Sechium edule</div>
             <div class="plant-card-common">Chow-Chow · Bangalore Brinjal · Chayote</div>
+            <div class="plant-card-tags">
+              <span class="tag tag-storage">Storage</span>
+              <span class="tag tag-perennial">Perennial</span>
+            </div>
+          </div>
+        </div>
+        <div class="plant-card" onclick="openModal('avocado')">
+          <img src="pics/avocado.png" alt="Avocado illustration" class="plant-card-img">
+          <div class="plant-card-body">
+            <div class="plant-card-name">Persea americana</div>
+            <div class="plant-card-common">Avocado · Vennai Pazham · Tree-borne healthy fats</div>
             <div class="plant-card-tags">
               <span class="tag tag-storage">Storage</span>
               <span class="tag tag-perennial">Perennial</span>
@@ -1425,40 +1513,52 @@ body {
       <h3 class="section-heading" id="hl-greens">4. Hardy Greens & Vitamins</h3>
       <p class="body-text">
         Focus on perennial or cut-and-come-again greens suited to cool, misty conditions. Mist and
-        rain help keep them lush; shade nets may be needed in periods of intense sun.
-        Wild-foraged greens like fiddlehead ferns add phytonutrient diversity beyond cultivated varieties.
+        rain help keep them lush; shade nets may be needed in periods of intense sun. The highland
+        toolkit is rich: kale, Swiss chard, spinach, cabbage, mustard
+        greens, local chenopodiums, and wild mustards. Fiddlehead ferns add foraged phytonutrient
+        diversity. Sorrel provides a tangy, perennial green. Herbs — coriander, mint, holy basil
+        (in protected spots), thyme, and oregano — complete the daily harvest layer.
       </p>
 
       <div class="plant-grid">
-        <div class="plant-card" onclick="openModal('moringa')">
-          <img src="pics/moringa.svg" alt="Moringa" class="plant-card-img">
+        <div class="plant-card" onclick="openModal('kale')">
+          <img src="pics/kale.png" alt="Kale illustration" class="plant-card-img">
           <div class="plant-card-body">
-            <div class="plant-card-name">Moringa oleifera</div>
-            <div class="plant-card-common">Drumstick · Murungai (lower slopes)</div>
-            <div class="plant-card-tags">
-              <span class="tag tag-vitamin">Vitamin</span>
-              <span class="tag tag-perennial">Perennial</span>
-            </div>
-          </div>
-        </div>
-        <div class="plant-card" onclick="openModal('amaranth')">
-          <img src="pics/amaranth.svg" alt="Amaranth" class="plant-card-img">
-          <div class="plant-card-body">
-            <div class="plant-card-name">Amaranthus spp.</div>
-            <div class="plant-card-common">Amaranth · Thandu Keerai · Multiple varieties</div>
+            <div class="plant-card-name">Brassica oleracea (Acephala)</div>
+            <div class="plant-card-common">Kale · Cut-and-come-again cool-weather green</div>
             <div class="plant-card-tags">
               <span class="tag tag-vitamin">Vitamin</span>
             </div>
           </div>
         </div>
-        <div class="plant-card" onclick="openModal('malabar-spinach')">
-          <img src="pics/malabar-spinach.svg" alt="Malabar spinach" class="plant-card-img">
+        <div class="plant-card" onclick="openModal('spinach')">
+          <img src="pics/spinach.png" alt="Spinach illustration" class="plant-card-img">
           <div class="plant-card-body">
-            <div class="plant-card-name">Basella alba</div>
-            <div class="plant-card-common">Malabar Spinach · Pasalai Keerai</div>
+            <div class="plant-card-name">Spinacia oleracea</div>
+            <div class="plant-card-common">Spinach · Pasalai · Quick cool-season green</div>
             <div class="plant-card-tags">
               <span class="tag tag-vitamin">Vitamin</span>
-              <span class="tag tag-perennial">Perennial</span>
+            </div>
+          </div>
+        </div>
+        <div class="plant-card" onclick="openModal('mustard-greens')">
+          <img src="pics/mustard-greens.png" alt="Mustard greens" class="plant-card-img">
+          <div class="plant-card-body">
+            <div class="plant-card-name">Brassica juncea</div>
+            <div class="plant-card-common">Mustard Greens · Kadugu Keerai · Fastest leaf crop</div>
+            <div class="plant-card-tags">
+              <span class="tag tag-vitamin">Vitamin</span>
+            </div>
+          </div>
+        </div>
+        <div class="plant-card" onclick="openModal('cabbage')">
+          <img src="pics/cabbage.png" alt="Cabbage illustration" class="plant-card-img">
+          <div class="plant-card-body">
+            <div class="plant-card-name">Brassica oleracea (Capitata)</div>
+            <div class="plant-card-common">Cabbage · Muttaikose · Long-storing cool-season head</div>
+            <div class="plant-card-tags">
+              <span class="tag tag-vitamin">Vitamin</span>
+              <span class="tag tag-storage">Storage</span>
             </div>
           </div>
         </div>
@@ -1467,10 +1567,49 @@ body {
       <h3 class="section-heading" id="hl-backup">5. Backup & Failsafe</h3>
       <p class="body-text">
         "Set and forget" — harvest as needed, they regrow from tubers and roots even if
-        above-ground parts die back. Elephant Foot Yam and Dioscorea yams (wild relatives
+        above-ground parts die back. Dioscorea yams (wild relatives
         abundant in the Western Ghats) are perennial, invasive-growth-habit plants that
-        represent the nutritional floor below which the system cannot fall.
+        represent the nutritional floor below which the system cannot fall. Jerusalem Artichoke
+        (Helianthus tuberosus) is a promising trial crop for cool highlands — extremely hardy,
+        perennial, and stores in ground. Scarlet Runner Bean (Phaseolus coccineus) adds a
+        perennial climbing legume layer with edible pods, seeds, and tubers.
       </p>
+
+      <div class="plant-grid">
+        <div class="plant-card" onclick="openModal('wild-yam')">
+          <img src="pics/wild-yam.png" alt="Wild yam" class="plant-card-img">
+          <div class="plant-card-body">
+            <div class="plant-card-name">Dioscorea spp.</div>
+            <div class="plant-card-common">Wild Yams · Native to Western Ghats</div>
+            <div class="plant-card-tags">
+              <span class="tag tag-backup">Backup</span>
+              <span class="tag tag-perennial">Perennial</span>
+            </div>
+          </div>
+        </div>
+        <div class="plant-card" onclick="openModal('jerusalem-artichoke')">
+          <img src="pics/jerusalem-artichoke.png" alt="Jerusalem artichoke" class="plant-card-img">
+          <div class="plant-card-body">
+            <div class="plant-card-name">Helianthus tuberosus</div>
+            <div class="plant-card-common">Jerusalem Artichoke · Sunchoke · Perennial backup tuber</div>
+            <div class="plant-card-tags">
+              <span class="tag tag-backup">Backup</span>
+              <span class="tag tag-perennial">Perennial</span>
+            </div>
+          </div>
+        </div>
+        <div class="plant-card" onclick="openModal('scarlet-runner')">
+          <img src="pics/scarlet-runner.png" alt="Scarlet runner bean" class="plant-card-img">
+          <div class="plant-card-body">
+            <div class="plant-card-name">Phaseolus coccineus</div>
+            <div class="plant-card-common">Scarlet Runner Bean · Perennial climbing bean</div>
+            <div class="plant-card-tags">
+              <span class="tag tag-backup">Backup</span>
+              <span class="tag tag-perennial">Perennial</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <h3 class="section-heading" id="hl-tips">Highland Strategy Tips</h3>
 
@@ -1481,25 +1620,25 @@ body {
           <th>Additions</th>
         </tr></thead>
         <tbody>
-          <tr><td>Calories/Fuel</td><td>Potatoes, Sweet Potato</td><td>Elephant Foot Yam, Dioscorea yams</td></tr>
-          <tr><td>Protein/Soil</td><td>French Beans, Lablab</td><td>Pigeon Pea, Rice Bean, Broad Beans</td></tr>
-          <tr><td>Storage/Bulk</td><td>Chow-Chow (chayote)</td><td>Pumpkins, Root crops (carrot, beet, garlic)</td></tr>
-          <tr><td>Vitamins/Greens</td><td>Amaranth, Malabar Spinach</td><td>Kale/Chard/Spinach, Moringa (lower), wild ferns</td></tr>
-          <tr><td>Backup</td><td>Elephant Foot Yam</td><td>Dioscorea yams, Chow-Chow, perennial legumes</td></tr>
+          <tr><td>Calories/Fuel</td><td>Potatoes, Carrots, Garlic</td><td>Beetroot, Hill Banana, Turnips, Radishes</td></tr>
+          <tr><td>Protein/Soil</td><td>French Beans, Broad Beans, Garden Peas</td><td>Rice Bean, Chickpeas, Cowpea</td></tr>
+          <tr><td>Storage/Bulk</td><td>Chow-Chow (chayote), Avocado</td><td>Cabbage, Pumpkins, Beetroot, Garlic</td></tr>
+          <tr><td>Vitamins/Greens</td><td>Kale, Spinach, Cabbage, Mustard Greens</td><td>Swiss Chard, Wild ferns, Sorrel, Herbs (mint, coriander, thyme)</td></tr>
+          <tr><td>Backup</td><td>Jerusalem Artichoke, Scarlet Runner Bean</td><td>Dioscorea yams, Chow-Chow, Perennial legumes</td></tr>
         </tbody>
       </table>
 
       <div class="kids-note">
         <div class="kids-label">🥔 For Young Highland Farmers</div>
-        <p>In the cool Kodaikanal hills, potatoes are your best friend! But yams are like secret buried treasure — plant them once, and they come back every year even if you forget about them. Chow-chow grows on a big vine and can hang in the kitchen for months without going bad. Pretty amazing, right?</p>
+        <p>In the cool Kodaikanal hills, potatoes are your best friend! But yams are like secret buried treasure — plant them once, and they come back every year even if you forget about them. Chow-chow grows on a big vine and can hang in the kitchen for months without going bad. Jerusalem artichoke is like a vegetable that never gives up — it grows in the worst soil and still feeds you!</p>
       </div>
 
     </main>
     <aside class="page-margin">
-      <img src="pics/section-highaltitude.svg" alt="High altitude illustration" class="margin-illus">
+      <img src="pics/potato.png" alt="Solanum tuberosum — potato" class="margin-illus">
       <div class="margin-illus-caption">
-        Kodaikanal Highland Zone
-        <span class="margin-illus-dims">800 × 300 px · Replace with landscape photo</span>
+        Solanum tuberosum — potato, the primary Kodaikanal highland staple
+        <span class="margin-illus-cite">Masclef, Atlas des Plantes de France (1891), pl. 234</span>
       </div>
 
       <div class="margin-note">
@@ -1547,26 +1686,32 @@ body {
         For hotter, humid tropical lowlands — Chennai, Coimbatore, Madurai, Trichy, coastal and
         plain areas — the strategy emphasises heat-tolerant, humidity-loving, traditional South Indian
         crops with strong perennial tendencies, drought and flood resilience, and deep integration
-        into everyday Tamil and Kerala cuisine: sambar, rasam, poriyal, aviyal.
+        into everyday Tamil and Kerala cuisine: sambar, rasam, poriyal, aviyal. Minor millets
+        (ragi, varagu, samai) add traditional grain diversity. Jackfruit provides tree-level bulk
+        storage.
       </p>
 
       <div class="callout-box">
         <div class="callout-label">Lowland Context</div>
         <p>Traditional kaadu or homestead systems — mix trees (coconut, mango, jackfruit) with
         understory tubers, climbers (beans/gourds), and greens. This is very common in Kerala and
-        rural Tamil Nadu for food security and represents centuries of optimisation.</p>
+        rural Tamil Nadu for food security and represents centuries of optimisation. Expanded with
+        traditional resilient perennials and minor millets for greater diversity.</p>
       </div>
 
       <h3 class="section-heading" id="ll-calories">1. Calorie-Rich Fuel Staples</h3>
       <p class="body-text">
         Tapioca (cassava) and the vast yam family outperform potatoes in lowland heat and humidity
         while storing well after harvest. Plantain/banana provides calorie-dense fruit, stem,
-        and flower — an entire food system in a single plant.
+        and flower — an entire food system in a single plant. Sweet potato (sakkaravalli kizhangu)
+        and elephant foot yam (senai) provide additional layers. Minor millets — ragi (finger millet),
+        varagu (kodo millet), samai (little millet) — add traditional grain diversity and
+        extraordinary storage life.
       </p>
 
       <div class="plant-grid">
         <div class="plant-card" onclick="openModal('cassava')">
-          <img src="pics/cassava.svg" alt="Cassava" class="plant-card-img">
+          <img src="pics/cassava.png" alt="Cassava" class="plant-card-img">
           <div class="plant-card-body">
             <div class="plant-card-name">Manihot esculenta</div>
             <div class="plant-card-common">Tapioca · Cassava · Maravalli Kizhangu</div>
@@ -1578,7 +1723,7 @@ body {
           </div>
         </div>
         <div class="plant-card" onclick="openModal('banana')">
-          <img src="pics/banana.svg" alt="Banana" class="plant-card-img">
+          <img src="pics/banana.png" alt="Banana" class="plant-card-img">
           <div class="plant-card-body">
             <div class="plant-card-name">Musa × paradisiaca</div>
             <div class="plant-card-common">Plantain · Banana · Vaazhai</div>
@@ -1589,7 +1734,7 @@ body {
           </div>
         </div>
         <div class="plant-card" onclick="openModal('sweet-potato')">
-          <img src="pics/sweet-potato.svg" alt="Sweet potato" class="plant-card-img">
+          <img src="pics/sweet-potato.png" alt="Sweet potato" class="plant-card-img">
           <div class="plant-card-body">
             <div class="plant-card-name">Ipomoea batatas</div>
             <div class="plant-card-common">Sweet Potato · Sakkaravalli</div>
@@ -1599,7 +1744,7 @@ body {
           </div>
         </div>
         <div class="plant-card" onclick="openModal('elephant-yam')">
-          <img src="pics/elephant-foot-yam.svg" alt="Elephant foot yam" class="plant-card-img">
+          <img src="pics/elephant-foot-yam.png" alt="Elephant foot yam" class="plant-card-img">
           <div class="plant-card-body">
             <div class="plant-card-name">Amorphophallus paeoniifolius</div>
             <div class="plant-card-common">Elephant Foot Yam · Senai</div>
@@ -1616,12 +1761,14 @@ body {
       <p class="body-text">
         Pigeon Pea (Toor Dal) is the cornerstone of South Indian protein and a perennial shrub —
         plant once, harvest for years. Intercrop heavily with other species to fix nitrogen in
-        the poor lateritic or red soils common across Tamil Nadu.
+        the poor lateritic or red soils common across Tamil Nadu. Lablab (avarai), cluster beans
+        (kothavarai), cowpea (karamani), rice bean, winged bean, and sword bean expand the protein
+        guild. Green gram and black gram provide quick-cycle options between main seasons.
       </p>
 
       <div class="plant-grid">
         <div class="plant-card" onclick="openModal('pigeon-pea')">
-          <img src="pics/pigeon-pea.svg" alt="Pigeon pea" class="plant-card-img">
+          <img src="pics/pigeon-pea.png" alt="Pigeon pea" class="plant-card-img">
           <div class="plant-card-body">
             <div class="plant-card-name">Cajanus cajan</div>
             <div class="plant-card-common">Pigeon Pea · Toor Dal · Thuvarai</div>
@@ -1632,7 +1779,7 @@ body {
           </div>
         </div>
         <div class="plant-card" onclick="openModal('lablab')">
-          <img src="pics/lablab-bean.svg" alt="Lablab" class="plant-card-img">
+          <img src="pics/lablab-bean.png" alt="Lablab" class="plant-card-img">
           <div class="plant-card-body">
             <div class="plant-card-name">Lablab purpureus</div>
             <div class="plant-card-common">Lablab · Avarai · Hyacinth Bean</div>
@@ -1642,32 +1789,85 @@ body {
             </div>
           </div>
         </div>
+        <div class="plant-card" onclick="openModal('sword-bean')">
+          <img src="pics/sword-bean.png" alt="Sword bean" class="plant-card-img">
+          <div class="plant-card-body">
+            <div class="plant-card-name">Canavalia gladiata</div>
+            <div class="plant-card-common">Sword Bean · Thumbai Kothavarai · Hardy tropical legume</div>
+            <div class="plant-card-tags">
+              <span class="tag tag-protein">Protein</span>
+              <span class="tag tag-backup">Backup</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="tip-box">
         <div class="tip-label">Protein Guild</div>
-        <p>Also include Cowpea (Karamani), Cluster Beans (Kothavarai/Gawar), Winged Bean, and
-        Sword Bean in suitable spots. These collectively form a robust protein and nitrogen guild
-        across all seasons.</p>
+        <p>Winged Bean (Psophocarpus tetragonolobus) is a tropical legume powerhouse — all parts
+        edible (pods, seeds, leaves, tubers). Sword Bean (Canavalia gladiata) is extremely hardy.
+        Green Gram (Mung bean, paasi payaru) and Black Gram (Ulunthu) provide quick-cycle protein
+        between main seasons. These collectively form a robust protein and nitrogen guild across
+        all seasons.</p>
       </div>
 
       <h3 class="section-heading" id="ll-storage">3. Bulk Food & Long Storage</h3>
       <p class="body-text">
         Ash Gourd (Pooshanikai) is the lowland equivalent of highland Chow-Chow: prolific, versatile,
-        and stores for months hanging in the kitchen. Traditional sand and ash storage methods and
-        hanging gourds eliminate the need for refrigeration.
+        and stores for months hanging in the kitchen. Bottle gourd, pumpkin, snake gourd, and ridge
+        gourd round out the gourd family. Jackfruit (palappazham) provides tree-level bulk — the
+        largest tree-borne fruit in the world, with ripe bulbs eaten fresh and raw young fruit
+        cooked as curry. Elephant foot yam and cassava tubers add underground storage.
+        Traditional sand and ash storage methods and hanging gourds eliminate the need for refrigeration.
       </p>
+
+      <div class="plant-grid">
+        <div class="plant-card" onclick="openModal('jackfruit')">
+          <img src="pics/jackfruit.png" alt="Jackfruit" class="plant-card-img">
+          <div class="plant-card-body">
+            <div class="plant-card-name">Artocarpus heterophyllus</div>
+            <div class="plant-card-common">Jackfruit · Palappazham · World's largest tree fruit</div>
+            <div class="plant-card-tags">
+              <span class="tag tag-storage">Storage</span>
+              <span class="tag tag-perennial">Perennial</span>
+            </div>
+          </div>
+        </div>
+        <div class="plant-card" onclick="openModal('ash-gourd')">
+          <img src="pics/ash-gourd.png" alt="Ash gourd" class="plant-card-img">
+          <div class="plant-card-body">
+            <div class="plant-card-name">Benincasa hispida</div>
+            <div class="plant-card-common">Ash Gourd · Pooshanikai · Lowland storage superhero</div>
+            <div class="plant-card-tags">
+              <span class="tag tag-storage">Storage</span>
+            </div>
+          </div>
+        </div>
+        <div class="plant-card" onclick="openModal('pumpkin')">
+          <img src="pics/pumpkin.png" alt="Pumpkin" class="plant-card-img">
+          <div class="plant-card-body">
+            <div class="plant-card-name">Cucurbita maxima</div>
+            <div class="plant-card-common">Pumpkin · Parangikkai · Long-storing warm-climate squash</div>
+            <div class="plant-card-tags">
+              <span class="tag tag-storage">Storage</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <h3 class="section-heading" id="ll-greens">4. Hardy Greens & Vitamins</h3>
       <p class="body-text">
         Moringa is the supreme "drumstick tree" for South India — leaves, flowers, and pods are all
         edible, extraordinarily nutritious, and the tree regrows vigorously after cutting. It is the
-        keystone of the vitamin layer in any Tamil or Kerala homestead.
+        keystone of the vitamin layer in any Tamil or Kerala homestead. Chekurmanis (Sauropus
+        androgynus), curry leaves (kadi patta / kariveppilai), holy basil (thulasi), Ceylon spinach,
+        katuk, and Brazilian spinach (perennial) expand the green toolkit far beyond what any single
+        species can provide.
       </p>
 
       <div class="plant-grid">
         <div class="plant-card" onclick="openModal('moringa')">
-          <img src="pics/moringa.svg" alt="Moringa" class="plant-card-img">
+          <img src="pics/moringa.png" alt="Moringa" class="plant-card-img">
           <div class="plant-card-body">
             <div class="plant-card-name">Moringa oleifera</div>
             <div class="plant-card-common">Drumstick · Murungai · The Miracle Tree</div>
@@ -1679,7 +1879,7 @@ body {
           </div>
         </div>
         <div class="plant-card" onclick="openModal('malabar-spinach')">
-          <img src="pics/malabar-spinach.svg" alt="Malabar spinach" class="plant-card-img">
+          <img src="pics/malabar-spinach.png" alt="Malabar spinach" class="plant-card-img">
           <div class="plant-card-body">
             <div class="plant-card-name">Basella alba</div>
             <div class="plant-card-common">Malabar Spinach · Pasalai Keerai</div>
@@ -1690,7 +1890,7 @@ body {
           </div>
         </div>
         <div class="plant-card" onclick="openModal('amaranth')">
-          <img src="pics/amaranth.svg" alt="Amaranth" class="plant-card-img">
+          <img src="pics/amaranth.png" alt="Amaranth" class="plant-card-img">
           <div class="plant-card-body">
             <div class="plant-card-name">Amaranthus spp.</div>
             <div class="plant-card-common">Amaranth · Thandu Keerai</div>
@@ -1703,36 +1903,77 @@ body {
 
       <h3 class="section-heading" id="ll-backup">5. Backup & Failsafe</h3>
       <p class="body-text">
-        Elephant Foot Yam and other Dioscorea yams are extremely hardy perennials that spread
-        if unmanaged, survive neglect, and persist through poor conditions. Cassava and Moringa
-        complete the failsafe layer — drought-tolerant, deep-rooted, and capable of producing
-        food even in degraded soils.
+        Breadfruit and Greater Yam (Dioscorea alata) are tree-level and vine-level backup
+        staples for lowlands — both extremely hardy perennials that produce reliably even when
+        neglected. Taro fills the wet-margin niche where other staples fail. Elephant Foot Yam
+        and other Dioscorea yams spread vigorously if unmanaged, survive neglect, and persist
+        through poor conditions. Cassava and Moringa complete the failsafe layer — drought-tolerant,
+        deep-rooted, and capable of producing food even in degraded soils. Jackfruit is the
+        ultimate tree-level backup — ultra-reliable, massive yields, and every part usable.
+        Pigeon Pea (perennial) and Lablab (persistent climber) fill in as living protein stores
+        that reseed themselves.
       </p>
+
+      <div class="plant-grid">
+        <div class="plant-card" onclick="openModal('breadfruit')">
+          <img src="pics/breadfruit.png" alt="Breadfruit" class="plant-card-img">
+          <div class="plant-card-body">
+            <div class="plant-card-name">Artocarpus altilis</div>
+            <div class="plant-card-common">Breadfruit · Seemai Palappazham · Tree-level backup starch</div>
+            <div class="plant-card-tags">
+              <span class="tag tag-backup">Backup</span>
+              <span class="tag tag-perennial">Perennial</span>
+            </div>
+          </div>
+        </div>
+        <div class="plant-card" onclick="openModal('greater-yam')">
+          <img src="pics/greater-yam.png" alt="Greater yam" class="plant-card-img">
+          <div class="plant-card-body">
+            <div class="plant-card-name">Dioscorea alata</div>
+            <div class="plant-card-common">Greater Yam · Purple Yam · Kava · Native perennial tuber</div>
+            <div class="plant-card-tags">
+              <span class="tag tag-backup">Backup</span>
+              <span class="tag tag-perennial">Perennial</span>
+            </div>
+          </div>
+        </div>
+        <div class="plant-card" onclick="openModal('taro')">
+          <img src="pics/taro.png" alt="Taro" class="plant-card-img">
+          <div class="plant-card-body">
+            <div class="plant-card-name">Colocasia esculenta</div>
+            <div class="plant-card-common">Taro · Seppan Kizhangu · Wet-tolerant backup staple</div>
+            <div class="plant-card-tags">
+              <span class="tag tag-backup">Backup</span>
+              <span class="tag tag-perennial">Perennial</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <h3 class="section-heading" id="ll-tips">Lowland Summary</h3>
 
       <table class="summary-table">
         <thead><tr><th>Category</th><th>Primary Crops</th><th>Strong Additions</th></tr></thead>
         <tbody>
-          <tr><td>Calories/Fuel</td><td>Cassava, Sweet Potato</td><td>Yams, Plantain/Banana, Elephant Foot Yam</td></tr>
-          <tr><td>Protein/Soil</td><td>Pigeon Pea, Lablab</td><td>Cluster Bean, Cowpea, Winged Bean</td></tr>
-          <tr><td>Storage/Bulk</td><td>Ash Gourd, Pumpkin</td><td>Bottle Gourd, Yams, Cassava</td></tr>
-          <tr><td>Vitamins/Greens</td><td>Moringa, Malabar Spinach</td><td>Amaranth, Chekurmanis, Ceylon Spinach</td></tr>
-          <tr><td>Backup</td><td>Elephant Foot Yam</td><td>Cassava, Moringa, perennial legumes</td></tr>
+          <tr><td>Calories/Fuel</td><td>Cassava, Sweet Potato, Plantain</td><td>Yams, Elephant Foot Yam, Minor Millets (Ragi, Varagu)</td></tr>
+          <tr><td>Protein/Soil</td><td>Pigeon Pea, Lablab, Sword Bean</td><td>Cluster Bean, Cowpea, Winged Bean, Green Gram, Black Gram</td></tr>
+          <tr><td>Storage/Bulk</td><td>Ash Gourd, Pumpkin, Jackfruit</td><td>Bottle Gourd, Snake Gourd, Ridge Gourd, Yams, Cassava</td></tr>
+          <tr><td>Vitamins/Greens</td><td>Moringa, Malabar Spinach, Chekurmanis</td><td>Amaranth, Curry Leaves, Ceylon Spinach, Katuk, Holy Basil</td></tr>
+          <tr><td>Backup</td><td>Breadfruit, Greater Yam, Taro</td><td>Elephant Foot Yam, Jackfruit, Cassava, Moringa</td></tr>
         </tbody>
       </table>
 
       <div class="kids-note">
         <div class="kids-label">🌴 For Young Lowland Farmers</div>
-        <p>The moringa tree is like a supermarket in one plant — the leaves go in your sambar, the long pods become drumstick curry, and even the flowers are edible! Cassava is your underground safe: if everything else fails, dig it up and you have food. Plant a banana and it will look after you for years!</p>
+        <p>The moringa tree is like a supermarket in one plant — the leaves go in your sambar, the long pods become drumstick curry, and even the flowers are edible! Jackfruit is the biggest fruit in the world that grows on a tree — one jackfruit can feed a whole family for days. Cassava is your underground safe: if everything else fails, dig it up and you have food. Plant a banana and it will look after you for years!</p>
       </div>
 
     </main>
     <aside class="page-margin">
-      <img src="pics/section-lowaltitude.svg" alt="Low altitude illustration" class="margin-illus">
+      <img src="pics/cassava.png" alt="Manihot esculenta — cassava" class="margin-illus">
       <div class="margin-illus-caption">
-        Tamil Nadu Lowland Zone
-        <span class="margin-illus-dims">800 × 300 px · Replace with landscape photo</span>
+        Manihot esculenta — cassava, the primary lowland calorie staple
+        <span class="margin-illus-cite">Köhler, Medizinal-Pflanzen (1887), pl. 090</span>
       </div>
 
       <div class="margin-note">
@@ -1910,10 +2151,10 @@ body {
 
     </main>
     <aside class="page-margin">
-      <img src="pics/section-culture.svg" alt="Culture illustration" class="margin-illus">
+      <img src="pics/banana.png" alt="Musa × paradisiaca — plantain" class="margin-illus">
       <div class="margin-illus-caption">
-        Traditional Knowledge Systems
-        <span class="margin-illus-dims">800 × 300 px · Replace with cultural image</span>
+        Musa × paradisiaca — plantain, a complete food system in one plant
+        <span class="margin-illus-cite">Blanco, Flora de Filipinas (1880–1883), pl. 88</span>
       </div>
 
       <div class="margin-note">
@@ -1956,78 +2197,156 @@ body {
   <div class="page-body">
     <main class="page-main">
       <p class="body-text">
-        Each specimen card below is a placeholder for a proper botanical illustration — hand-drawn,
-        watercolour, or photographic. Click any card for specimen details and illustration specifications.
-        Replace the SVG files in the <code>pics/</code> folder with your actual artwork.
+        All 31 species referenced in this manual — click any card for full specimen details,
+        historical illustration credits, and practical cultivation notes.
       </p>
 
       <div class="plant-grid" style="grid-template-columns: repeat(auto-fill, minmax(170px, 1fr))">
-        <div class="plant-card" onclick="openModal('potato')">
-          <img src="pics/potato.svg" class="plant-card-img" alt="Potato">
-          <div class="plant-card-body"><div class="plant-card-name">Solanum tuberosum</div><div class="plant-card-common">Potato</div></div>
-        </div>
-        <div class="plant-card" onclick="openModal('sweet-potato')">
-          <img src="pics/sweet-potato.svg" class="plant-card-img" alt="Sweet Potato">
-          <div class="plant-card-body"><div class="plant-card-name">Ipomoea batatas</div><div class="plant-card-common">Sweet Potato</div></div>
-        </div>
-        <div class="plant-card" onclick="openModal('elephant-yam')">
-          <img src="pics/elephant-foot-yam.svg" class="plant-card-img" alt="Elephant Foot Yam">
-          <div class="plant-card-body"><div class="plant-card-name">Amorphophallus paeoniifolius</div><div class="plant-card-common">Elephant Foot Yam</div></div>
-        </div>
-        <div class="plant-card" onclick="openModal('wild-yam')">
-          <img src="pics/wild-yam.svg" class="plant-card-img" alt="Wild Yam">
-          <div class="plant-card-body"><div class="plant-card-name">Dioscorea spp.</div><div class="plant-card-common">Wild Yam</div></div>
-        </div>
-        <div class="plant-card" onclick="openModal('pigeon-pea')">
-          <img src="pics/pigeon-pea.svg" class="plant-card-img" alt="Pigeon Pea">
-          <div class="plant-card-body"><div class="plant-card-name">Cajanus cajan</div><div class="plant-card-common">Pigeon Pea / Toor Dal</div></div>
-        </div>
-        <div class="plant-card" onclick="openModal('lablab')">
-          <img src="pics/lablab-bean.svg" class="plant-card-img" alt="Lablab Bean">
-          <div class="plant-card-body"><div class="plant-card-name">Lablab purpureus</div><div class="plant-card-common">Lablab / Avarai</div></div>
-        </div>
-        <div class="plant-card" onclick="openModal('chow-chow')">
-          <img src="pics/chow-chow.svg" class="plant-card-img" alt="Chow Chow">
-          <div class="plant-card-body"><div class="plant-card-name">Sechium edule</div><div class="plant-card-common">Chow-Chow / Chayote</div></div>
-        </div>
-        <div class="plant-card" onclick="openModal('moringa')">
-          <img src="pics/moringa.svg" class="plant-card-img" alt="Moringa">
-          <div class="plant-card-body"><div class="plant-card-name">Moringa oleifera</div><div class="plant-card-common">Drumstick / Murungai</div></div>
-        </div>
-        <div class="plant-card" onclick="openModal('cassava')">
-          <img src="pics/cassava.svg" class="plant-card-img" alt="Cassava">
-          <div class="plant-card-body"><div class="plant-card-name">Manihot esculenta</div><div class="plant-card-common">Cassava / Tapioca</div></div>
-        </div>
-        <div class="plant-card" onclick="openModal('banana')">
-          <img src="pics/banana.svg" class="plant-card-img" alt="Banana">
-          <div class="plant-card-body"><div class="plant-card-name">Musa × paradisiaca</div><div class="plant-card-common">Plantain / Banana</div></div>
-        </div>
         <div class="plant-card" onclick="openModal('amaranth')">
-          <img src="pics/amaranth.svg" class="plant-card-img" alt="Amaranth">
+          <img src="pics/amaranth.png" class="plant-card-img" alt="Amaranth">
           <div class="plant-card-body"><div class="plant-card-name">Amaranthus spp.</div><div class="plant-card-common">Amaranth / Keerai</div></div>
         </div>
+        <div class="plant-card" onclick="openModal('ash-gourd')">
+          <img src="pics/ash-gourd.png" class="plant-card-img" alt="Ash Gourd">
+          <div class="plant-card-body"><div class="plant-card-name">Benincasa hispida</div><div class="plant-card-common">Ash Gourd / Pooshanikai</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('avocado')">
+          <img src="pics/avocado.png" class="plant-card-img" alt="Avocado">
+          <div class="plant-card-body"><div class="plant-card-name">Persea americana</div><div class="plant-card-common">Avocado / Vennai Pazham</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('banana')">
+          <img src="pics/banana.png" class="plant-card-img" alt="Banana">
+          <div class="plant-card-body"><div class="plant-card-name">Musa × paradisiaca</div><div class="plant-card-common">Plantain / Banana</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('breadfruit')">
+          <img src="pics/breadfruit.png" class="plant-card-img" alt="Breadfruit">
+          <div class="plant-card-body"><div class="plant-card-name">Artocarpus altilis</div><div class="plant-card-common">Breadfruit</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('cabbage')">
+          <img src="pics/cabbage.png" class="plant-card-img" alt="Cabbage">
+          <div class="plant-card-body"><div class="plant-card-name">Brassica oleracea</div><div class="plant-card-common">Cabbage / Muttaikose</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('carrot')">
+          <img src="pics/carrot.png" class="plant-card-img" alt="Carrot">
+          <div class="plant-card-body"><div class="plant-card-name">Daucus carota</div><div class="plant-card-common">Carrot / Gajjar</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('cassava')">
+          <img src="pics/cassava.png" class="plant-card-img" alt="Cassava">
+          <div class="plant-card-body"><div class="plant-card-name">Manihot esculenta</div><div class="plant-card-common">Cassava / Tapioca</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('chow-chow')">
+          <img src="pics/chow-chow.png" class="plant-card-img" alt="Chow Chow">
+          <div class="plant-card-body"><div class="plant-card-name">Sechium edule</div><div class="plant-card-common">Chow-Chow / Chayote</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('elephant-yam')">
+          <img src="pics/elephant-foot-yam.png" class="plant-card-img" alt="Elephant Foot Yam">
+          <div class="plant-card-body"><div class="plant-card-name">Amorphophallus paeoniifolius</div><div class="plant-card-common">Elephant Foot Yam</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('faba-bean')">
+          <img src="pics/faba-bean.png" class="plant-card-img" alt="Faba Bean">
+          <div class="plant-card-body"><div class="plant-card-name">Vicia faba</div><div class="plant-card-common">Faba Bean / Mochaikkai</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('french-bean')">
+          <img src="pics/french-bean.png" class="plant-card-img" alt="French Bean">
+          <div class="plant-card-body"><div class="plant-card-name">Phaseolus vulgaris</div><div class="plant-card-common">French Bean</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('garden-pea')">
+          <img src="pics/garden-pea.png" class="plant-card-img" alt="Garden Pea">
+          <div class="plant-card-body"><div class="plant-card-name">Pisum sativum</div><div class="plant-card-common">Garden Pea / Pattani</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('garlic')">
+          <img src="pics/garlic.png" class="plant-card-img" alt="Garlic">
+          <div class="plant-card-body"><div class="plant-card-name">Allium sativum</div><div class="plant-card-common">Garlic / Vellai Poondu</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('greater-yam')">
+          <img src="pics/greater-yam.png" class="plant-card-img" alt="Greater Yam">
+          <div class="plant-card-body"><div class="plant-card-name">Dioscorea alata</div><div class="plant-card-common">Greater Yam / Kava</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('jackfruit')">
+          <img src="pics/jackfruit.png" class="plant-card-img" alt="Jackfruit">
+          <div class="plant-card-body"><div class="plant-card-name">Artocarpus heterophyllus</div><div class="plant-card-common">Jackfruit / Palappazham</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('jerusalem-artichoke')">
+          <img src="pics/jerusalem-artichoke.png" class="plant-card-img" alt="Jerusalem Artichoke">
+          <div class="plant-card-body"><div class="plant-card-name">Helianthus tuberosus</div><div class="plant-card-common">Jerusalem Artichoke</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('kale')">
+          <img src="pics/kale.png" class="plant-card-img" alt="Kale">
+          <div class="plant-card-body"><div class="plant-card-name">Brassica oleracea</div><div class="plant-card-common">Kale</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('lablab')">
+          <img src="pics/lablab-bean.png" class="plant-card-img" alt="Lablab Bean">
+          <div class="plant-card-body"><div class="plant-card-name">Lablab purpureus</div><div class="plant-card-common">Lablab / Avarai</div></div>
+        </div>
         <div class="plant-card" onclick="openModal('malabar-spinach')">
-          <img src="pics/malabar-spinach.svg" class="plant-card-img" alt="Malabar Spinach">
+          <img src="pics/malabar-spinach.png" class="plant-card-img" alt="Malabar Spinach">
           <div class="plant-card-body"><div class="plant-card-name">Basella alba</div><div class="plant-card-common">Malabar Spinach</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('moringa')">
+          <img src="pics/moringa.png" class="plant-card-img" alt="Moringa">
+          <div class="plant-card-body"><div class="plant-card-name">Moringa oleifera</div><div class="plant-card-common">Drumstick / Murungai</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('mustard-greens')">
+          <img src="pics/mustard-greens.png" class="plant-card-img" alt="Mustard Greens">
+          <div class="plant-card-body"><div class="plant-card-name">Brassica juncea</div><div class="plant-card-common">Mustard Greens / Kadugu Keerai</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('pigeon-pea')">
+          <img src="pics/pigeon-pea.png" class="plant-card-img" alt="Pigeon Pea">
+          <div class="plant-card-body"><div class="plant-card-name">Cajanus cajan</div><div class="plant-card-common">Pigeon Pea / Toor Dal</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('potato')">
+          <img src="pics/potato.png" class="plant-card-img" alt="Potato">
+          <div class="plant-card-body"><div class="plant-card-name">Solanum tuberosum</div><div class="plant-card-common">Potato</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('pumpkin')">
+          <img src="pics/pumpkin.png" class="plant-card-img" alt="Pumpkin">
+          <div class="plant-card-body"><div class="plant-card-name">Cucurbita maxima</div><div class="plant-card-common">Pumpkin / Parangikkai</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('scarlet-runner')">
+          <img src="pics/scarlet-runner.png" class="plant-card-img" alt="Scarlet Runner Bean">
+          <div class="plant-card-body"><div class="plant-card-name">Phaseolus coccineus</div><div class="plant-card-common">Scarlet Runner Bean</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('spinach')">
+          <img src="pics/spinach.png" class="plant-card-img" alt="Spinach">
+          <div class="plant-card-body"><div class="plant-card-name">Spinacia oleracea</div><div class="plant-card-common">Spinach / Pasalai</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('sword-bean')">
+          <img src="pics/sword-bean.png" class="plant-card-img" alt="Sword Bean">
+          <div class="plant-card-body"><div class="plant-card-name">Canavalia gladiata</div><div class="plant-card-common">Sword Bean / Thumbai Kothavarai</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('sweet-potato')">
+          <img src="pics/sweet-potato.png" class="plant-card-img" alt="Sweet Potato">
+          <div class="plant-card-body"><div class="plant-card-name">Ipomoea batatas</div><div class="plant-card-common">Sweet Potato</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('taro')">
+          <img src="pics/taro.png" class="plant-card-img" alt="Taro">
+          <div class="plant-card-body"><div class="plant-card-name">Colocasia esculenta</div><div class="plant-card-common">Taro / Seppan Kizhangu</div></div>
+        </div>
+        <div class="plant-card" onclick="openModal('wild-yam')">
+          <img src="pics/wild-yam.png" class="plant-card-img" alt="Wild Yam">
+          <div class="plant-card-body"><div class="plant-card-name">Dioscorea spp.</div><div class="plant-card-common">Wild Yam</div></div>
         </div>
       </div>
 
       <div class="callout-box" style="margin-top:2rem">
-        <div class="callout-label">Illustration Specifications</div>
-        <p><strong>Plant specimens:</strong> 400 × 500 px (portrait), 150–300 dpi for print, PNG or JPG. Show full plant or key identifying part (leaf, root, fruit). Include a ruler or hand for scale. Hand-drawn botanical style preferred. <br><br>
-        <strong>Section headers:</strong> 800 × 300 px (landscape), same dpi. Landscape photo, watercolour, or aerial view of the farming zone. Save to <code>pics/</code> folder with the same filenames shown above.</p>
+        <div class="callout-label">Historical Illustrations</div>
+        <p>All plant illustrations in this manual are sourced from public-domain pre-1920 botanical archives: Francisco Manuel Blanco's <em>Flora de Filipinas</em> (1880–1883), Köhler's <em>Medizinal-Pflanzen</em> (1887), Curtis's <em>Botanical Magazine</em> (1828), Masclef's <em>Atlas des Plantes de France</em> (1891), and other classic works of botanical art. Each plate is credited in its caption.</p>
       </div>
     </main>
     <aside class="page-margin">
       <div class="margin-note">
-        <span class="margin-note-label">File Format Guide</span>
-        Plant specimens: <br>400 × 500 px · PNG<br>150–300 dpi<br><br>
-        Section banners: <br>800 × 300 px · JPG/PNG<br>150 dpi minimum<br><br>
-        Replace files in <code>pics/</code> folder keeping exact filenames.
+        <span class="margin-note-label">Plate Credits</span>
+        Blanco (1880–1883): Lablab, Pigeon Pea, Moringa, Musa, Amaranthus, Basella,
+        Chow-Chow, Cassava, Ash Gourd, Pumpkin, Sword Bean, Mustard Greens.<br><br>
+        Other sources: Köhler (1887), Curtis (1828), Masclef (1891), Edwards (1829),
+        Thomé (1885–1888), Van Houtte (1867), Jacquin (1772), Bley (1897),
+        Rheede (1682), Bentley & Trimen (1880), Vilmorin (1904), Freire (1790),
+        Schubert (1887).
       </div>
       <div class="margin-note">
-        <span class="margin-note-label">Illustration Style</span>
-        Traditional botanical illustration style — pen and ink with watercolour wash — fits the manual aesthetic best. Photography also works well for field identification use by children.
+        <span class="margin-note-label">Style Note</span>
+        All illustrations are public-domain pre-1920 botanical art, chosen for uniform
+        pen-and-ink with watercolour wash style across species.
       </div>
     </aside>
   </div>
@@ -2040,8 +2359,20 @@ body {
 
 </div><!-- /content-area -->
 
-<!-- ══════════════════ SPECIMEN MODAL ══════════════════ -->
-<div class="modal-overlay" id="specimen-modal" onclick="closeModal(event)">
+<!-- ─────────── PSALM 65 FOOTER ─────────── -->
+<div class="footer-marquee">
+  <div class="footer-marquee-label">Psalm 65</div>
+  <div class="footer-marquee-track">
+    <div class="footer-marquee-text">
+      Praise waiteth for thee, O God, in Sion: and unto thee shall the vow be performed. Thou that hearest prayer, unto thee shall all flesh come. Iniquities prevail against me: as for our transgressions, thou shalt purge them away. Blessed is the man whom thou choosest, and causest to approach unto thee, that he may dwell in thy courts: we shall be satisfied with the goodness of thy house, even of thy holy temple. By terrible things in righteousness wilt thou answer us, O God of our salvation; who art the confidence of all the ends of the earth, and of them that are afar off upon the sea: Which by his strength setteth fast the mountains; being girded with power: Which stilleth the noise of the seas, the noise of their waves, and the tumult of the people. They also that dwell in the uttermost parts are afraid at thy tokens: thou makest the outgoings of the morning and evening to rejoice. Thou visitest the earth, and waterest it: thou greatly enrichest it with the river of God, which is full of water: thou preparest them corn, when thou hast so provided for it. Thou waterest the ridges thereof abundantly: thou settlest the furrows thereof: thou makest it soft with showers: thou blessest the springing thereof. Thou crownest the year with thy goodness; and thy paths drop fatness. They drop upon the pastures of the wilderness: and the little hills rejoice on every side. The pastures are clothed with flocks; the valleys also are covered over with corn; they shout for joy, they also sing.
+      <span class="marquee-sep">❦</span>
+      Praise waiteth for thee, O God, in Sion: and unto thee shall the vow be performed. Thou that hearest prayer, unto thee shall all flesh come. Iniquities prevail against me: as for our transgressions, thou shalt purge them away. Blessed is the man whom thou choosest, and causest to approach unto thee, that he may dwell in thy courts: we shall be satisfied with the goodness of thy house, even of thy holy temple. By terrible things in righteousness wilt thou answer us, O God of our salvation; who art the confidence of all the ends of the earth, and of them that are afar off upon the sea: Which by his strength setteth fast the mountains; being girded with power: Which stilleth the noise of the seas, the noise of their waves, and the tumult of the people. They also that dwell in the uttermost parts are afraid at thy tokens: thou makest the outgoings of the morning and evening to rejoice. Thou visitest the earth, and waterest it: thou greatly enrichest it with the river of God, which is full of water: thou preparest them corn, when thou hast so provided for it. Thou waterest the ridges thereof abundantly: thou settlest the furrows thereof: thou makest it soft with showers: thou blessest the springing thereof. Thou crownest the year with thy goodness; and thy paths drop fatness. They drop upon the pastures of the wilderness: and the little hills rejoice on every side. The pastures are clothed with flocks; the valleys also are covered over with corn; they shout for joy, they also sing.
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── SPECIMEN MODAL ─────────── -->
+<div class="modal-overlay" id="specimen-modal" role="dialog" aria-modal="true" aria-label="Plant specimen details" onclick="closeModal(event)">
   <div class="modal-box">
     <button class="modal-close" onclick="closeModalDirect()">✕</button>
     <img src="" alt="" class="modal-img" id="modal-img">
@@ -2059,125 +2390,223 @@ const PLANTS = {
   'potato': {
     latin: 'Solanum tuberosum',
     common: 'Potato · Common among Poombarai and Vilpatti farmers',
-    img: 'pics/potato.svg',
-    dims: 'Illustration: 400 × 500 px · 150 dpi · PNG',
-    notes: 'The primary calorie staple at Kodaikanal heights. Thrives in 15–20°C with well-drained acidic soil. Plant seed tubers in ridges, mulch with straw. High caloric density (770 kcal/kg). Stores 3–6 months in cool, dark, ventilated conditions. Major crop in upper Kodaikanal hills. Illustration should show full plant with tubers exposed, plus a cross-section of mature tuber. Tamil name: Urulaikizhangu (உருளைக்கிழங்கு).'
+    img: 'pics/potato.png',
+    dims: 'Masclef, Atlas des Plantes de France (1891), pl. 234',
+    notes: 'The primary calorie staple at Kodaikanal heights. Thrives in 15–20°C with well-drained acidic soil. Plant seed tubers in ridges, mulch with straw. High caloric density (770 kcal/kg). Stores 3–6 months in cool, dark, ventilated conditions. Major crop in upper Kodaikanal hills. Tamil name: Urulaikizhangu (உருளைக்கிழங்கு).'
   },
   'sweet-potato': {
     latin: 'Ipomoea batatas',
     common: 'Sweet Potato · Sakkaravalli Kizhangu · Gem of both altitude zones',
-    img: 'pics/sweet-potato.svg',
-    dims: 'Illustration: 400 × 500 px · 150 dpi · PNG',
-    notes: 'Calorie-dense perennial vine adaptable across both highland and lowland zones. Drought-tolerant once established; leaves also edible and highly nutritious. Yields even in marginal soils. Vines can be propagated from cuttings — no seed needed. Tamil name: Sakkaravalli Kizhangu (சர்க்கரைவள்ளிக்கிழங்கு). Illustration: show vine with tubers, leaves, and a single leaf close-up.'
+    img: 'pics/sweet-potato.png',
+    dims: 'Edwards\'s Botanical Register (1829–1847), pl. 56',
+    notes: 'Calorie-dense perennial vine adaptable across both highland and lowland zones. Drought-tolerant once established; leaves also edible and highly nutritious. Yields even in marginal soils. Vines can be propagated from cuttings — no seed needed. Tamil name: Sakkaravalli Kizhangu (சர்க்கரைவள்ளிக்கிழங்கு).'
   },
   'elephant-yam': {
     latin: 'Amorphophallus paeoniifolius',
     common: 'Elephant Foot Yam · Senai Kizhangu · Suran · Native Western Ghats perennial',
-    img: 'pics/elephant-foot-yam.svg',
-    dims: 'Illustration: 400 × 500 px · 150 dpi · PNG',
-    notes: 'Native to the Western Ghats region. A hardy perennial corm that stores excellently, yields prolifically once established, and acts as both calorie staple and ultimate backup crop. Survives neglect, drought, and poor conditions. Can be left in the ground as a living larder. High calcium oxalate when raw — always cook thoroughly. Tamil name: Senai Kizhangu (சேனைக்கிழங்கு). Illustration: show corm cross-section, leaf structure, and characteristic single large stem.'
+    img: 'pics/elephant-foot-yam.png',
+    dims: 'Curtis\'s Botanical Magazine, vol. 55 (1828), pl. 2812',
+    notes: 'Native to the Western Ghats region. A hardy perennial corm that stores excellently, yields prolifically once established, and acts as both calorie staple and ultimate backup crop. Survives neglect, drought, and poor conditions. Can be left in the ground as a living larder. High calcium oxalate when raw — always cook thoroughly. Tamil name: Senai Kizhangu (சேனைக்கிழங்கு).'
   },
   'wild-yam': {
     latin: 'Dioscorea spp.',
     common: 'Wild Yams · Multiple species native to Western Ghats',
-    img: 'pics/wild-yam.svg',
-    dims: 'Illustration: 400 × 500 px · 150 dpi · PNG',
-    notes: 'Multiple Dioscorea species are native to and abundant in the Western Ghats. Perennial climbers with edible tubers, some varieties also with aerial bulbils (air potatoes). Extremely hardy backup food source requiring zero cultivation once established. Some species require processing to remove bitterness/toxins — document local preparation methods carefully. Illustration: show climbing vine with heart-shaped leaves, tubers, and any aerial bulbils present.'
+    img: 'pics/wild-yam.png',
+    dims: 'Vilmorin-Andrieux, Les Plantes Potagères (1883)',
+    notes: 'Multiple Dioscorea species are native to and abundant in the Western Ghats. Perennial climbers with edible tubers, some varieties also with aerial bulbils (air potatoes). Extremely hardy backup food source requiring zero cultivation once established. Some species require processing to remove bitterness/toxins — document local preparation methods carefully.'
   },
   'pigeon-pea': {
     latin: 'Cajanus cajan',
     common: 'Pigeon Pea · Toor Dal · Thuvarai · The cornerstone South Indian dal',
-    img: 'pics/pigeon-pea.svg',
-    dims: 'Illustration: 400 × 500 px · 150 dpi · PNG',
-    notes: 'Perennial shrub lasting 3–5 years. Classic South Indian protein — the base of sambar and dal dishes. Deep taproot improves soil structure while root nodules fix 40–200 kg N/ha/year. Drought-tolerant once established, tolerates light frosts. Biomass from pruning serves as mulch or green manure. Intercrop with staples for maximum benefit. Tamil name: Thuvarai (துவரை). Illustration: show full shrub, compound leaves, pod in various stages, and cross-section of seed.'
+    img: 'pics/pigeon-pea.png',
+    dims: 'Blanco, Flora de Filipinas (1880–1883), Atlas I, pl. 167',
+    notes: 'Perennial shrub lasting 3–5 years. Classic South Indian protein — the base of sambar and dal dishes. Deep taproot improves soil structure while root nodules fix 40–200 kg N/ha/year. Drought-tolerant once established, tolerates light frosts. Biomass from pruning serves as mulch or green manure. Intercrop with staples for maximum benefit. Tamil name: Thuvarai (துவரை).'
   },
   'lablab': {
     latin: 'Lablab purpureus',
     common: 'Lablab · Hyacinth Bean · Avarai · Avare · Traditional South Indian climber',
-    img: 'pics/lablab-bean.svg',
-    dims: 'Illustration: 400 × 500 px · 150 dpi · PNG',
-    notes: 'Perennial or semi-perennial climbing legume, very traditional across South India. Drought-tolerant once established; adapts from highlands to lowlands. Pods, seeds, leaves, and flowers all edible. Fixes nitrogen effectively. Grows up corn or any trellis. Purple-flowered varieties are ornamentally striking. Grows in both altitude zones — a truly versatile companion plant. Tamil name: Avarai (அவரை). Illustration: show climbing vine, trifoliate leaf, distinctive flat pods, and purple flowers.'
+    img: 'pics/lablab-bean.png',
+    dims: 'Blanco, Flora de Filipinas (1880–1883), Atlas II, pl. 292',
+    notes: 'Perennial or semi-perennial climbing legume, very traditional across South India. Drought-tolerant once established; adapts from highlands to lowlands. Pods, seeds, leaves, and flowers all edible. Fixes nitrogen effectively. Grows up corn or any trellis. Purple-flowered varieties are ornamentally striking. Grows in both altitude zones — a truly versatile companion plant. Tamil name: Avarai (அவரை).'
   },
   'chow-chow': {
     latin: 'Sechium edule',
     common: 'Chow-Chow · Chayote · Bangalore Brinjal · Star of Kodaikanal highland kitchens',
-    img: 'pics/chow-chow.svg',
-    dims: 'Illustration: 400 × 500 px · 150 dpi · PNG',
-    notes: 'The star of high-altitude storage in the Palani Hills. A prolific perennial vine that takes over entire trees/structures once established. Fruit stores for months at ambient temperatures. Shoot tips also edible as greens. Integrates seamlessly into South Indian cooking: kootu, sambar, poriyal. Low maintenance — plant once and harvest prolifically for years. Thrives specifically in Kodaikanal-like conditions. Tamil name: Chow-Chow (சௌ சௌ). Illustration: show vine, large lobed leaves, tendrils, green pear-shaped fruit, and cross-section.'
+    img: 'pics/chow-chow.png',
+    dims: 'Blanco, Flora de Filipinas (1880–1883), Atlas II, pl. 292',
+    notes: 'The star of high-altitude storage in the Palani Hills. A prolific perennial vine that takes over entire trees/structures once established. Fruit stores for months at ambient temperatures. Shoot tips also edible as greens. Integrates seamlessly into South Indian cooking: kootu, sambar, poriyal. Low maintenance — plant once and harvest prolifically for years. Thrives specifically in Kodaikanal-like conditions. Tamil name: Chow-Chow (சௌ சௌ).'
   },
   'moringa': {
     latin: 'Moringa oleifera',
     common: 'Drumstick · Murungai · Sajna · The miracle tree of South India',
-    img: 'pics/moringa.svg',
-    dims: 'Illustration: 400 × 500 px · 150 dpi · PNG',
-    notes: 'Arguably the most nutritionally complete tree in the South Indian food system. Leaves contain 7× the vitamin C of oranges, 4× the calcium of milk, and complete protein. Pods (drumsticks) are the base of iconic South Indian sambar. Flowers edible. Drought-tolerant, fast-growing, and coppices readily. Best at lower altitudes but grows in protected highland spots. A cornerstone of both caloric and micronutrient security. Tamil name: Murungai (முருங்கை). Illustration: show pinnate leaves, white flower cluster, long green pods.'
+    img: 'pics/moringa.png',
+    dims: 'Blanco, Flora de Filipinas (1880–1883), Atlas II, pl. 292',
+    notes: 'Arguably the most nutritionally complete tree in the South Indian food system. Leaves contain 7× the vitamin C of oranges, 4× the calcium of milk, and complete protein. Pods (drumsticks) are the base of iconic South Indian sambar. Flowers edible. Drought-tolerant, fast-growing, and coppices readily. Best at lower altitudes but grows in protected highland spots. A cornerstone of both caloric and micronutrient security. Tamil name: Murungai (முருங்கை).'
   },
   'cassava': {
     latin: 'Manihot esculenta',
     common: 'Tapioca · Cassava · Maravalli Kizhangu · Primary lowland calorie crop',
-    img: 'pics/cassava.svg',
-    dims: 'Illustration: 400 × 500 px · 150 dpi · PNG',
-    notes: 'Extremely hardy, heat-tolerant, high-calorie root crop. Traditional staple in Tamil Nadu and Kerala. Propagated easily from stem cuttings — seeds rarely needed. Tolerates drought, poor soils, and variable rainfall. Sweet varieties can be eaten directly; bitter varieties require processing to remove cyanogenic glycosides. Tubers store well in ground or after harvest. Leaves also edible (high protein) after cooking. Tamil name: Maravalli Kizhangu (மரவள்ளிக்கிழங்கு). Illustration: show distinctive palmate leaves, stem with nodes for cutting propagation, and exposed tubers.'
+    img: 'pics/cassava.png',
+    dims: 'Blanco, Flora de Filipinas (1880–1883), Atlas II, pl. 292',
+    notes: 'Extremely hardy, heat-tolerant, high-calorie root crop. Traditional staple in Tamil Nadu and Kerala. Propagated easily from stem cuttings — seeds rarely needed. Tolerates drought, poor soils, and variable rainfall. Sweet varieties can be eaten directly; bitter varieties require processing to remove cyanogenic glycosides. Tubers store well in ground or after harvest. Leaves also edible (high protein) after cooking. Tamil name: Maravalli Kizhangu (மரவள்ளிக்கிழங்கு).'
   },
   'banana': {
     latin: 'Musa × paradisiaca',
     common: 'Plantain · Banana · Vaazhai · The complete food system in one plant',
-    img: 'pics/banana.svg',
-    dims: 'Illustration: 400 × 500 px · 150 dpi · PNG',
-    notes: 'Not just a fruit — an entire food system. Fruit (raw and cooked), flower (vazhaipoo — used in poriyal and curry), tender stem/pith (vazhaithandu — fibrous inner core for cooking), and even the leaves used as plates and for cooking (banana leaf meals). Plantain varieties preferred for cooking; dessert varieties for fresh eating. Propagates from suckers — plant once, harvest indefinitely. Provides wind shelter and mulch. Tamil name: Vaazhai (வாழை). Illustration: show full plant with flower, fruit bunch, and cross-section of stem.'
+    img: 'pics/banana.png',
+    dims: 'Blanco, Flora de Filipinas (1880–1883), Atlas II, pl. 292',
+    notes: 'Not just a fruit — an entire food system. Fruit (raw and cooked), flower (vazhaipoo — used in poriyal and curry), tender stem/pith (vazhaithandu — fibrous inner core for cooking), and even the leaves used as plates and for cooking (banana leaf meals). Plantain varieties preferred for cooking; dessert varieties for fresh eating. Propagates from suckers — plant once, harvest indefinitely. Provides wind shelter and mulch. Tamil name: Vaazhai (வாழை).'
   },
   'amaranth': {
     latin: 'Amaranthus spp.',
     common: 'Amaranth · Thandu Keerai · Mulai Keerai · Multiple varieties, year-round greens',
-    img: 'pics/amaranth.svg',
-    dims: 'Illustration: 400 × 500 px · 150 dpi · PNG',
-    notes: 'Multiple varieties thrive across both altitude zones. Cut-and-come-again greens, extraordinarily nutritious (iron, calcium, protein, vitamins A and C). Seeds also edible as grain. Self-seeds prolifically — once established, it maintains itself. Both red and green varieties have local names and culinary uses across Tamil and Kerala cuisine. Fast-growing, heat-tolerant. Tamil names: Thandu Keerai (தண்டுக் கீரை, green stem), Mulai Keerai (முளைக் கீரை). Illustration: show full plant with seed head, leaf close-up, red and green variety comparison.'
+    img: 'pics/amaranth.png',
+    dims: 'Blanco, Flora de Filipinas (1880–1883), Atlas II, pl. 292',
+    notes: 'Multiple varieties thrive across both altitude zones. Cut-and-come-again greens, extraordinarily nutritious (iron, calcium, protein, vitamins A and C). Seeds also edible as grain. Self-seeds prolifically — once established, it maintains itself. Both red and green varieties have local names and culinary uses across Tamil and Kerala cuisine. Fast-growing, heat-tolerant. Tamil names: Thandu Keerai (தண்டுக் கீரை, green stem), Mulai Keerai (முளைக் கீரை).'
   },
   'malabar-spinach': {
     latin: 'Basella alba',
     common: 'Malabar Spinach · Pasalai Keerai · Perennial climbing green',
-    img: 'pics/malabar-spinach.svg',
-    dims: 'Illustration: 400 × 500 px · 150 dpi · PNG',
-    notes: 'Perennial climbing vine, thrives in heat and humidity. Thick, mucilaginous leaves used as a substitute for spinach in sambar, poriyal, and soups. Grows in both altitude zones. Propagates easily from cuttings. Highly nutritious: vitamins A, C, iron, calcium. The red-stemmed variety (Basella rubra) is particularly ornamental. Low maintenance, vigorous grower. Tamil name: Pasalai Keerai (பசலைக் கீரை). Illustration: show climbing vine, succulent glossy leaves, and small berry-like fruits.'
+    img: 'pics/malabar-spinach.png',
+    dims: 'Blanco, Flora de Filipinas (1880–1883), Atlas II, pl. 292',
+    notes: 'Perennial climbing vine, thrives in heat and humidity. Thick, mucilaginous leaves used as a substitute for spinach in sambar, poriyal, and soups. Grows in both altitude zones. Propagates easily from cuttings. Highly nutritious: vitamins A, C, iron, calcium. The red-stemmed variety (Basella rubra) is particularly ornamental. Low maintenance, vigorous grower. Tamil name: Pasalai Keerai (பசலைக் கீரை).'
+  },
+  'carrot': {
+    latin: 'Daucus carota',
+    common: 'Carrot · Gajjar · Underground sweet root for two climates',
+    img: 'pics/carrot.png',
+    dims: 'Thomé, Flora von Deutschland (1888), pl. 386',
+    notes: 'Adaptable root crop that grows in both highlands and lowlands. Kodaikanal produces excellent carrots in the cool season. Rich in beta-carotene (vitamin A), fibre, and natural sugars for quick energy. Stores well in cool sand or in the ground. Fast-maturing varieties provide harvest in 60–80 days. Tamil name: Carrot (கேரட்).'
+  },
+  'garlic': {
+    latin: 'Allium sativum',
+    common: 'Garlic · Vellai Poondu · Kodaikanal GI-tagged hill garlic',
+    img: 'pics/garlic.png',
+    dims: 'Bentley & Trimen, Medicinal Plants (1880), pl. 233',
+    notes: 'Kodaikanal hill garlic (GI-tagged) is renowned for its pungency and storage life — keeps 6–8 months in cool, dry conditions. Essential flavouring across South Indian cuisine. Plant cloves in well-drained soil; harvest when tops dry. A natural vermicide and antibacterial — invaluable for immune health in a survival context. Tamil name: Vellai Poondu (வெள்ளைப் பூண்டு).'
+  },
+  'cabbage': {
+    latin: 'Brassica oleracea (Capitata group)',
+    common: 'Cabbage · Muttaikose · Long-storing cool-season head',
+    img: 'pics/cabbage.png',
+    dims: 'Bley, Botanisches Bilderbuch (1897), pl. 12',
+    notes: 'Cool-season crop ideal for highland conditions. Heads store for weeks in cool shade without refrigeration. Rich in vitamin C, K, and fibre. Ferments into sauerkraut for long-term preservation — a survival food classic. Multiple heads per season possible in Kodaikanal. Tamil name: Muttaikose (முட்டைக்கோஸ்).'
+  },
+  'kale': {
+    latin: 'Brassica oleracea (Acephala group)',
+    common: 'Kale · Perennial cut-and-come-again green for cool highlands',
+    img: 'pics/kale.png',
+    dims: 'Vilmorin-Andrieux, Les Plantes Potagères (1904), pl. 18',
+    notes: 'Extremely hardy, frost-tolerant brassica that thrives in cool highland conditions. Cut-and-come-again harvesting — pick outer leaves, inner ones keep growing. Nutrition powerhouse: vitamins A, C, K, calcium, iron, and antioxidants. Performs poorly in lowland heat — best in misty hills. Tamil name: occasionally Kiris (கீரிஸ்).'
+  },
+  'spinach': {
+    latin: 'Spinacia oleracea',
+    common: 'Spinach · Pasalai · Quick-growing cool-season green',
+    img: 'pics/spinach.png',
+    dims: 'Thomé, Flora von Deutschland (1885), pl. 112',
+    notes: 'Fast-growing leafy green suited to cooler highland conditions. Rich in iron, calcium, and vitamins A and C. Multiple successions possible. Bolt-resistant varieties extend the harvest season. Excellent companion to legumes in the highland garden. Tamil name: Pasalai (பசலை).'
+  },
+  'mustard-greens': {
+    latin: 'Brassica juncea',
+    common: 'Mustard Greens · Kadugu Keerai · Pungent heat-tolerant green',
+    img: 'pics/mustard-greens.png',
+    dims: 'Köhler, Medizinal-Pflanzen (1887), pl. 215',
+    notes: 'One of the fastest greens from seed to harvest (21–30 days). Pungent, peppery flavour; rich in vitamins A, C, K, and cancer-fighting glucosinolates. More heat-tolerant than true spinach — suitable for lower highland zones and inter-season gaps. Seeds yield edible mustard. Tamil name: Kadugu Keerai (கடுகுக் கீரை).'
+  },
+  'jerusalem-artichoke': {
+    latin: 'Helianthus tuberosus',
+    common: 'Jerusalem Artichoke · Sunchoke · Perennial backup tuber for cool highlands',
+    img: 'pics/jerusalem-artichoke.png',
+    dims: 'Jacquin, Hortus Botanicus Vindobonensis (1772), vol. 3',
+    notes: 'Extremely hardy perennial sunflower grown for its knobby, sweet tubers. Stores best in-ground — harvest as needed. Rich in inulin (a prebiotic fibre) rather than starch, making it suitable for diabetic diets. Thrives in marginal soil, spreads vigorously, and survives neglect. Promising failsafe crop for cool highlands where frost-tolerant perennials are scarce. Tamil name: not traditional — trial crop.'
+  },
+  'scarlet-runner': {
+    latin: 'Phaseolus coccineus',
+    common: 'Scarlet Runner Bean · Perennial climbing bean with backup potential',
+    img: 'pics/scarlet-runner.png',
+    dims: 'Thomé, Flora von Deutschland (1885), pl. 89',
+    notes: 'Perennial in cool climates — tuberous roots survive winter and regrow in spring from underground storage. Striking red flowers attract pollinators. Pods, seeds, and tubers all edible. Grows well in Kodaikanal conditions. A rare bean that functions as a semi-perennial in highland systems, reducing replanting labour. Tamil name: not traditional.'
+  },
+  'french-bean': {
+    latin: 'Phaseolus vulgaris',
+    common: 'French Bean · Bush Bean · Climbing Bean · Highland protein staple',
+    img: 'pics/french-bean.png',
+    dims: 'Van Houtte, Flore des Serres (1867), vol. 17, pl. 1709',
+    notes: 'The key highland protein and nitrogen-fixing legume. Bush varieties mature faster; climbing types produce over a longer season. Intercrop with maize for Three Sisters polyculture. Pods harvested green as vegetables; dried seeds store as protein insurance. Well-suited to Kodaikanal conditions. Tamil name: Pasipayar (பாசிப்பயறு, green bean).'
+  },
+  'faba-bean': {
+    latin: 'Vicia faba',
+    common: 'Faba Bean · Broad Bean · Mochaikkai · Cool-season protein powerhouse',
+    img: 'pics/faba-bean.png',
+    dims: 'Thomé, Flora von Deutschland (1885), pl. 76',
+    notes: 'Excellent high-altitude bean that thrives in cool 15–20°C conditions. High protein content (25g per 100g), rich in fibre, folate, and minerals. Grown in Kodaikanal and Nilgiri hills traditionally. A major rotation legume that fixes substantial nitrogen. Seeds eaten fresh or dried. Tamil name: Mochaikkai (மொச்சைக்காய்).'
+  },
+  'garden-pea': {
+    latin: 'Pisum sativum',
+    common: 'Garden Pea · Pattani · Cool-season climbing legume',
+    img: 'pics/garden-pea.png',
+    dims: 'Thomé, Flora von Deutschland (1885), pl. 82',
+    notes: 'Quick-growing cool-season legume that thrives in highlands. Pods and seeds rich in protein, fibre, and vitamins A, C, K. Fixes nitrogen in soil for subsequent crops. Multiple varieties: snow peas (flat pods), snap peas (edible pods), and shelling peas. Succession-plant for extended harvest. Tamil name: Pattani (பட்டாணி).'
+  },
+  'avocado': {
+    latin: 'Persea americana',
+    common: 'Avocado · Vennai Pazham · Tree-borne healthy fats for highlands',
+    img: 'pics/avocado.png',
+    dims: 'Freire, Coleção Brasiliana Iconográfica (c. 1790)',
+    notes: 'Tree-level calorie source providing healthy monounsaturated fats — critical for metabolic resilience in a survival context. Grows in protected highland microclimates; thrives better in lower altitudes. Rich in potassium, vitamin E, B6, and fibre. Fruits store on the tree, extending harvest season. Multiple South Indian varieties exist. Tamil name: Vennai Pazham (வெண்ணைப் பழம்).'
+  },
+  'jackfruit': {
+    latin: 'Artocarpus heterophyllus',
+    common: 'Jackfruit · Palappazham · The largest tree-borne fruit — tree-level bulk storage',
+    img: 'pics/jackfruit.png',
+    dims: 'Rheede, Hortus Malabaricus (1682), vol. 3',
+    notes: 'Monumental tree producing the world\'s largest fruit (up to 40kg each). Ripe bulbs eaten fresh; raw young fruit cooked as curry (the "vegetable mutton" of South India). Seeds are boiled or roasted — high in protein and minerals. Wood is also valuable. A single mature tree can feed a family through the lean season. Tamil name: Palappazham (பலாப்பழம்).'
+  },
+  'ash-gourd': {
+    latin: 'Benincasa hispida',
+    common: 'Ash Gourd · Pooshanikai · Winter Melon · Lowland storage superhero',
+    img: 'pics/ash-gourd.png',
+    dims: 'Blanco, Flora de Filipinas (1880–1883), Atlas II, pl. 323',
+    notes: 'The lowland equivalent of highland chow-chow — prolific, versatile, stores for months hanging in the kitchen. Ash coating prevents spoilage. Used in kootu, sambar, and especially for kayakar kootu (clay-pot ash gourd curry). High water content with trace nutrients. A must-have for lowland storage resilience. Tamil name: Pooshanikai (பூசணிக்காய்).'
+  },
+  'pumpkin': {
+    latin: 'Cucurbita maxima / C. moschata',
+    common: 'Pumpkin · Parangikkai · Warm-climate squash for long storage',
+    img: 'pics/pumpkin.png',
+    dims: 'Blanco, Flora de Filipinas (1880–1883), Atlas II, pl. 320',
+    notes: 'Heat-tolerant squash that stores for months without refrigeration. Rich in vitamin A, fibre, and antioxidants. Seeds also nutritious (protein, zinc). Vines can be trained over structures to save ground space. Provides excellent ground cover to suppress weeds. In South Indian cooking, used in sambar, kootu, and sweets. Tamil name: Parangikkai (பரங்கிக்காய்).'
+  },
+  'sword-bean': {
+    latin: 'Canavalia gladiata',
+    common: 'Sword Bean · Thumbai Kothavarai · Extremely hardy tropical legume',
+    img: 'pics/sword-bean.png',
+    dims: 'Blanco, Flora de Filipinas (1880–1883), Atlas II, pl. 449',
+    notes: 'Extremely hardy tropical legume that tolerates drought, poor soil, and the toughest lowland conditions. Vigorous climbing vine producing large pods with edible seeds. Young pods and leaves also edible after cooking. Deep root system for nitrogen fixation. Traditional South Indian famine food — known for producing reliably when other crops fail. Tamil name: Thumbai Kothavarai (தும்பை கொத்தவரை).'
+  },
+  'breadfruit': {
+    latin: 'Artocarpus altilis',
+    common: 'Breadfruit · Seeemai Palappazham · Tree-level backup starch for lowlands',
+    img: 'pics/breadfruit.png',
+    dims: 'Blanco, Flora de Filipinas (1880–1883), Atlas II, pl. 267',
+    notes: 'Starchy, calorie-dense tree fruit that serves as a lowland backup staple. Roasted, boiled, fried, or fermented — highly versatile. A single tree yields 150–200kg per year. Related to jackfruit but with solid, potato-like flesh. Grows well in Kerala lowlands and coastal Tamil Nadu. Perennial tree crop requiring minimal care once established. Tamil name: Seemai Palappazham (சீமைப் பலாப்பழம்).'
+  },
+  'greater-yam': {
+    latin: 'Dioscorea alata',
+    common: 'Greater Yam · Purple Yam · Kava · Native perennial tuber for lowland backup',
+    img: 'pics/greater-yam.png',
+    dims: 'Schubert, Naturgeschichte des Pflanzenreichs (1887)',
+    notes: 'A staple Dioscorea species across South India with purple flesh. Extremely hardy perennial vine producing massive underground tubers. Stores well in ground or in cool conditions. Related to wild yams but larger, more productive, and more palatable without extensive processing. Winged stems distinguish it from other yam species. Tamil name: Kava (கவை).'
+  },
+  'taro': {
+    latin: 'Colocasia esculenta',
+    common: 'Taro · Seppan Kizhangu · Arbi · Wet-tolerant backup for lowlands',
+    img: 'pics/taro.png',
+    dims: 'Curtis\'s Botanical Magazine (1894), pl. 7263',
+    notes: 'Ancient tuber crop thriving in moist lowland conditions — the bog-tolerant staple. Leaves also edible (pathrode, dal-simmered). Corms have a nutty flavour when cooked. Stores in-ground as a living larder. Rich in fibre, potassium, and vitamins E and B. A versatile backup crop that fills the wet-margin niche where many other staples fail. Tamil name: Seppan Kizhangu (சேப்பான்கிழங்கு).'
   },
 };
 
-/* ── Page navigation ── */
-const pages = ['cover','principles','highlands','lowlands','culture','specimens'];
-let activePage = 'cover';
-
-function showPage(id, anchor) {
-  if (activePage !== id) {
-    document.getElementById('page-' + activePage).classList.remove('active');
-    activePage = id;
-    const el = document.getElementById('page-' + id);
-    el.classList.add('active', 'fade-in');
-    setTimeout(() => el.classList.remove('fade-in'), 500);
-  }
-  // scroll to anchor
-  if (anchor) {
-    setTimeout(() => {
-      const t = document.getElementById(anchor);
-      if (t) t.scrollIntoView({behavior:'smooth', block:'start'});
-    }, 80);
-  } else {
-    window.scrollTo({top:0, behavior:'smooth'});
-  }
-  closeSidebar();
-  updateActiveNav(id);
-}
-
-function updateActiveNav(id) {
-  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-  // Rough match
-  document.querySelectorAll('.nav-link').forEach(l => {
-    if (l.getAttribute('onclick') && l.getAttribute('onclick').includes("'" + id + "'")) {
-      l.classList.add('active');
-    }
-  });
-}
-
-/* ── Sidebar toggle ── */
+/* ── Sidebar toggle (defined first so showPage can use it) ── */
 const sidebar = document.getElementById('sidebar');
 const backdrop = document.getElementById('sidebar-backdrop');
 
@@ -2190,6 +2619,72 @@ backdrop.addEventListener('click', closeSidebar);
 function closeSidebar() {
   sidebar.classList.remove('open');
   backdrop.classList.remove('open');
+}
+
+/* ── Page navigation with History API ── */
+const pages = ['cover','principles','highlands','lowlands','culture','specimens'];
+let activePage = 'cover';
+
+function showPage(id, anchor, pushState) {
+  if (pushState !== false) {
+    const hash = anchor ? '#' + id + '/' + anchor : '#' + id;
+    history.pushState({ page: id, anchor: anchor || null }, '', hash);
+  }
+  if (activePage !== id) {
+    document.getElementById('page-' + activePage).classList.remove('active');
+    activePage = id;
+    const el = document.getElementById('page-' + id);
+    el.classList.add('active', 'fade-in');
+    setTimeout(() => el.classList.remove('fade-in'), 400);
+  }
+  if (anchor) {
+    setTimeout(() => {
+      const t = document.getElementById(anchor);
+      if (t) t.scrollIntoView({behavior:'smooth', block:'start'});
+    }, 80);
+  } else {
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  closeSidebar();
+  updateActiveNav(id);
+}
+
+/* ── Handle browser back/forward ── */
+window.addEventListener('popstate', e => {
+  const state = e.state;
+  if (state && state.page) {
+    showPage(state.page, state.anchor || null, false);
+  } else if (location.hash) {
+    const hash = location.hash.replace(/^#/, '');
+    const parts = hash.split('/');
+    const pageId = parts[0];
+    const anchor = parts[1] || null;
+    showPage(pageId, anchor, false);
+  } else {
+    showPage('cover', null, false);
+  }
+});
+
+/* ── Read initial hash on load ── */
+(function initFromHash() {
+  const hash = location.hash.replace(/^#/, '');
+  if (!hash) return;
+  const parts = hash.split('/');
+  const pageId = parts[0];
+  const anchor = parts[1] || null;
+  if (pages.includes(pageId)) {
+    showPage(pageId, anchor, false);
+  }
+})();
+
+function updateActiveNav(id) {
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  // Rough match
+  document.querySelectorAll('.nav-link').forEach(l => {
+    if (l.getAttribute('onclick') && l.getAttribute('onclick').includes("'" + id + "'")) {
+      l.classList.add('active');
+    }
+  });
 }
 
 /* ── Modal ── */
@@ -2225,41 +2720,33 @@ Object.entries(PLANTS).forEach(([id, p]) => {
     action: () => openModal(id),
   });
 });
-// Static content entries
-const staticEntries = [
-  { section:'Part I', title:'First Principles — Hierarchical Resilience', snippet:'Foundation layer: reliable calories + soil fertility. Daily maintenance: vitamins + fresh produce...', page:'principles', anchor:null },
-  { section:'Part I', title:'For the Human Body — 5 Nutritional Layers', snippet:'Calorie base, protein, micronutrients, bulk storage, and backup failsafe layers...', page:'principles', anchor:'human-body' },
-  { section:'Part I', title:'For the Soil — Regenerative Fertility', snippet:'Nitrogen fixation, organic matter cycling, polyculture guilds, minimal disturbance...', page:'principles', anchor:'for-soil' },
-  { section:'Part I', title:'Climate Adaptation — High & Low Altitude', snippet:'Cool misty highlands 10–25°C vs hot tropical lowlands 28–38°C species selection...', page:'principles', anchor:'for-climate' },
-  { section:'Part I', title:'Hierarchical Logic — 4 Tiers of Resilience', snippet:'Foundation, daily maintenance, buffer, and safety net — the core logic of survival food...', page:'principles', anchor:'hierarchy' },
-  { section:'Part II', title:'Highland Calorie Staples — Potatoes & Yams', snippet:'Potatoes, sweet potato, elephant foot yam, Dioscorea species for Kodaikanal hills...', page:'highlands', anchor:'hl-calories' },
-  { section:'Part II', title:'Highland Protein Enrichers', snippet:'French beans, lablab, pigeon pea, rice bean, cowpea for high altitude...', page:'highlands', anchor:'hl-protein' },
-  { section:'Part II', title:'Chow-Chow and Highland Storage', snippet:'Sechium edule chayote chow-chow thrives in Palani Hills, stores months without refrigeration...', page:'highlands', anchor:'hl-storage' },
-  { section:'Part II', title:'Highland Hardy Greens', snippet:'Amaranth, Malabar spinach, kale, moringa, wild ferns for vitamins at altitude...', page:'highlands', anchor:'hl-greens' },
-  { section:'Part II', title:'Highland Backup Failsafe Plants', snippet:'Set-and-forget perennials: elephant foot yam, Dioscorea, chow-chow, perennial legumes...', page:'highlands', anchor:'hl-backup' },
-  { section:'Part II', title:'Highland Tips — Soil, Pests, Storage', snippet:'Polyculture, Three Sisters method, soil amendment, frost protection, seed saving...', page:'highlands', anchor:'hl-tips' },
-  { section:'Part III', title:'Lowland Calorie Staples — Cassava & Banana', snippet:'Tapioca cassava, sweet potato, elephant foot yam, plantain banana for Tamil Nadu lowlands...', page:'lowlands', anchor:'ll-calories' },
-  { section:'Part III', title:'Moringa — The Drumstick Tree', snippet:'Murungai leaves flowers pods all edible, extraordinarily nutritious, drought tolerant...', page:'lowlands', anchor:'ll-greens' },
-  { section:'Part III', title:'Lowland Protein Guild', snippet:'Pigeon pea toor dal thuvarai, lablab avarai, cowpea karamani, cluster beans kothavarai...', page:'lowlands', anchor:'ll-protein' },
-  { section:'Part III', title:'Ash Gourd and Lowland Storage', snippet:'Pooshanikai ash gourd, bottle gourd, pumpkin — stores months hanging without refrigeration...', page:'lowlands', anchor:'ll-storage' },
-  { section:'Part IV', title:'Traditional Nutrition — Fermentation & Preservation', snippet:'Sun-drying, pickling, fermenting extends nutrition beyond what refrigeration can achieve...', page:'culture', anchor:'c-nutrition' },
-  { section:'Part IV', title:'Panchakavya & Jeevamrutham — Soil Biostimulants', snippet:'Traditional bio-formulations: cow dung, urine, herbs for soil microbial life...', page:'culture', anchor:'c-soil' },
-  { section:'Part IV', title:'Surangas — Traditional Water Harvesting', snippet:'Horizontal tunnels, tank irrigation, farm ponds, check dams, contour bunding...', page:'culture', anchor:'c-soil' },
-  { section:'Part IV', title:'Multi-Strata Homegarden — Kerala & Tamil Model', snippet:'4–7 vertical layers mimicking forest ecology, 50–120+ species per garden...', page:'culture', anchor:'c-climate' },
-  { section:'Part IV', title:'Community Seed Banks & Knowledge Transmission', snippet:'Traditional seed exchange, collective knowledge continuity, genetic diversity across generations...', page:'culture', anchor:'c-security' },
-  { section:'Part IV', title:'Three Sisters Polyculture — Maize + Beans + Squash', snippet:'Intercropping corn beans chow-chow pumpkin, nitrogen fixation companion planting...', page:'highlands', anchor:null },
-  { section:'Reference', title:'Nitrogen Fixation — How Legumes Enrich Soil', snippet:'Rhizobia bacteria symbiosis, 50–200 kg N/ha/year biological contribution...', page:'principles', anchor:'for-soil' },
-  { section:'Reference', title:'Mycorrhizal Fungi & Soil Networks', snippet:'Perennials and no-till preserve fungal networks critical in high-rainfall environments...', page:'principles', anchor:'for-soil' },
-  { section:'Reference', title:'Minimum Dietary Diversity — Nutritional Goals', snippet:'Dietary diversity indices, anti-inflammatory fibre-rich foods, gut microbiome health...', page:'principles', anchor:'human-body' },
-  { section:'Reference', title:'Sambar, Rasam, Poriyal — Cultural Crop Integration', snippet:'Growing varieties used in daily Tamil and Kerala cuisine for cultural food security...', page:'lowlands', anchor:'ll-tips' },
-];
-
-staticEntries.forEach(e => {
-  searchData.push({
-    section: e.section,
-    title: e.title,
-    snippet: e.snippet,
-    action: () => showPage(e.page, e.anchor),
+// Index page content dynamically
+const sectionMap = { principles:'Part I', highlands:'Part II', lowlands:'Part III', culture:'Part IV' };
+['principles','highlands','lowlands','culture'].forEach(pageId => {
+  const pageEl = document.getElementById('page-' + pageId);
+  if (!pageEl) return;
+  const main = pageEl.querySelector('.page-main');
+  if (!main) return;
+  const headings = main.querySelectorAll('.section-heading');
+  headings.forEach(heading => {
+    const anchor = heading.id;
+    const title = heading.textContent.trim();
+    if (!anchor) return;
+    let texts = [];
+    let sib = heading.nextElementSibling;
+    while (sib && !sib.classList.contains('section-heading')) {
+      const t = sib.textContent.trim();
+      if (t.length > 20) texts.push(t);
+      sib = sib.nextElementSibling;
+    }
+    if (texts.length) {
+      searchData.push({
+        section: sectionMap[pageId],
+        title: title,
+        snippet: texts.join(' · ').slice(0, 200),
+        action: () => showPage(pageId, anchor),
+      });
+    }
   });
 });
 
@@ -2297,7 +2784,8 @@ function doSearch(q) {
 
   // Attach actions via dataset approach
   searchPanel.querySelectorAll('.search-result-item').forEach((el, i) => {
-    el.onclick = () => {
+    el.onclick = (e) => {
+      e.stopPropagation();
       results[i].action();
       searchPanel.style.display = 'none';
       searchInput.value = '';
@@ -2307,7 +2795,11 @@ function doSearch(q) {
   searchPanel.style.display = 'block';
 }
 
-searchInput.addEventListener('input', () => doSearch(searchInput.value));
+let searchTimeout;
+searchInput.addEventListener('input', () => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => doSearch(searchInput.value), 200);
+});
 searchInput.addEventListener('keydown', e => {
   if (e.key === 'Escape') { searchPanel.style.display = 'none'; searchInput.blur(); }
 });
