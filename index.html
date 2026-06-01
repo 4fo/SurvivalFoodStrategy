@@ -536,6 +536,10 @@ body {
     );
 }
 
+#page-acknowledgements .page-body {
+  grid-template-columns: 1fr 240px;
+}
+
 /* ═══════════════════════════════════════════════════
    TYPOGRAPHY — BODY CONTENT
 ═══════════════════════════════════════════════════ */
@@ -913,6 +917,7 @@ body {
 }
 @media (max-width: 780px) {
   .page-body { grid-template-columns: 1fr; }
+  #page-acknowledgements .page-body { grid-template-columns: 1fr; }
   .page-margin { display: block; padding: 1.2rem 1.5rem; }
   .page-main { padding: 1.5rem; border-right: none; }
   .pillars { grid-template-columns: 1fr; }
@@ -1291,6 +1296,7 @@ body {
   <div class="nav-section">
     <div class="nav-section-title">Reference</div>
     <a class="nav-link" onclick="showPage('specimens')">🌿 Full Plant Index</a>
+    <a class="nav-link" onclick="showPage('acknowledgements')">✎ Acknowledgements</a>
   </div>
 </nav>
 
@@ -2554,6 +2560,73 @@ body {
   <div class="page-footer">
     <div class="page-footer-rule"></div>
     <div class="page-num">Reference · Plant Specimen Index</div>
+    <div class="page-footer-rule"></div>
+  </div>
+</section>
+
+<!-- ─────────── ACKNOWLEDGEMENTS ─────────── -->
+<section class="chapter" id="page-acknowledgements">
+  <div class="chapter-header">
+    <div class="chapter-num">Afterword</div>
+    <h2 class="chapter-title">Acknowledgements</h2>
+    <p class="chapter-sub">A Journey of Discovery</p>
+    <div class="chapter-rule"></div>
+  </div>
+
+  <div class="page-body">
+    <main class="page-main">
+      <p class="body-text">
+        This adventure begins with a lazy afternoon&rsquo;s conversation with         my dear friend
+        <strong>Jithin Samji</strong> who was asking an interesting and I think very intriguing question,
+        &ldquo;How do we plant a garden that feeds people; which would sustain folks
+        when other food systems, supply chains fail?&rdquo;
+      </p>
+      <p class="body-text">
+        This started off some thoughts and meanderings. This is something that should work
+        for all and help a lot of people when it comes to something to fall back on.
+        When distilling ideas and frameworks for lenses I wanted to look through, one
+        guy&rsquo;s approach simply stood out: It was Dan Walmsley of
+        <a href="https://www.youtube.com/@danwalmsley-s3n/" target="_blank">@danwalmsley-s3n</a>.
+      </p>
+      <p class="body-text">
+        The principles of the Survival Food Strategy is an application of Dan&rsquo;s ideas
+        as shared in this video:
+        <a href="https://www.youtube.com/shorts/L3f9rf3iv2s" target="_blank">
+        SHTF 5 survival foods you should be growing now</a>.
+        These principles have then been re-contextualised for Southern Indian conditions
+        both for the hills and plains; web searching and back and forths with Grok AI
+        was also useful in this process.
+      </p>
+      <p class="body-text">
+        Akira Miyawaki&rsquo;s food forest concepts and ideas from previous years of
+        ponderings have also been useful in these directions.
+      </p>
+      <p class="body-text">
+        This is an ongoing adventure through which we hope to discover, enjoy and share
+        God our Heavenly Father&rsquo;s great love, provision and care.
+      </p>
+      <p class="body-text" style="text-align:center; margin-top:2rem">
+        _______________
+      </p>
+      <p class="body-text" style="text-align:center; font-family:var(--font-heading); font-size:0.95rem; color:var(--ink-med); margin-top:0.3rem">
+        John Vijay Abraham
+      </p>
+    </main>
+    <aside class="page-margin">
+      <div class="margin-note" style="border-left-color:var(--gold)">
+        <span class="margin-note-label">Psalm 139:14</span>
+        <p>
+          I will praise thee; for I am fearfully and wonderfully made:<br>
+          marvellous are thy works;<br>
+          and that my soul knoweth right well.
+        </p>
+        <p style="margin-top:0.4rem; font-size:0.78rem; color:var(--ink-faint)">&mdash; Psalm 139:14</p>
+      </div>
+    </aside>
+  </div>
+  <div class="page-footer">
+    <div class="page-footer-rule"></div>
+    <div class="page-num">Acknowledgements</div>
     <div class="page-footer-rule"></div>
   </div>
 </section>
